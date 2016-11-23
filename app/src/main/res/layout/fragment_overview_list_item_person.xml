@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:layout_marginLeft="8dp"
+    android:layout_marginRight="8dp"
+    android:weightSum="2"
+    >
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:textSize="22dp"
+        android:textStyle="bold"
+        android:paddingBottom="10dp"
+        android:paddingTop="10dp"
+        android:id="@+id/fragment_overview_item_tv_name"
+        />
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:paddingBottom="10dp"
+        android:paddingTop="10dp"
+        android:textSize="22dp"
+        android:textStyle="bold"
+        android:textAlignment="textEnd"
+        android:id="@+id/fragment_overview_item_tv_money"
+        />
+</LinearLayout>
