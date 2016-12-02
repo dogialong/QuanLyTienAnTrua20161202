@@ -4,14 +4,27 @@
     <string name="action_search">Search</string>
     <string name="drawer_open">Open</string>
     <string name="drawer_close">Close</string>
-
+    <string name="account_failed">Invalid user</string>
+    <string name="account_has_space">User or password not allowed has space</string>
     <string name="nav_item_overview">Overview</string>
     <string name="nav_item_pay">Pay</string>
     <string name="nav_item_recharge">Recharge</string>
     <string name="nav_item_people">People</string>
     <string name="nav_item_warning">Warning</string>
     <string name="nav_item_logout">Logout</string>
-
+    <string name="error_create_person">Incorrect account. Please try again</string>
+    <string name="missing_info">Missing information</string>
+    <string name="pass_incorrect">Password incorrect</string>
+    <string name="user_wrong">User incorrect</string>
+    <string name="not_same">Repassword not same password</string>
+    <string name="other_error">Account exits or wrong input</string>
+    <string name="add_person_success">Add person success</string>
+    <string name="add_person_error">Add person failed</string>
+    <string name="pay_success">Pay success</string>
+    <string name="pay_error">Pay failed</string>
+    <string name="recharge_success">Recharge success</string>
+    <string name="recharge_falied">Recharge failed</string>
+    <string name="delete_person_success">Delete person success</string>
     <!-- navigation drawer item labels  -->
     <string-array name="nav_drawer_labels">
         <item>@string/nav_item_overview</item>

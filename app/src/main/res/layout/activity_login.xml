@@ -26,8 +26,7 @@
     <EditText
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:inputType="textPersonName"
-        android:hint="User Name"
+        android:hint="Username"
         android:textColor="@color/colorPrimary"
         android:padding="@dimen/padding_text"
         android:ems="10"
@@ -40,6 +39,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:hint="Password"
+        android:fontFamily="sans-serif"
         android:layout_marginTop="74dp"
         android:padding="@dimen/padding_text"
         android:textColor="@color/colorPrimary"

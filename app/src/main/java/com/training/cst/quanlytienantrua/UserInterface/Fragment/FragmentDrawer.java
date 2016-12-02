@@ -2,7 +2,6 @@ package com.training.cst.quanlytienantrua.UserInterface.Fragment;
 
 import android.content.Context;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -17,7 +16,6 @@ import android.view.ViewGroup;
 import com.training.cst.quanlytienantrua.DataManager.Adapter.NavigationDrawerAdapter;
 import com.training.cst.quanlytienantrua.DataManager.Object.NavDrawerItem;
 import com.training.cst.quanlytienantrua.R;
-import com.training.cst.quanlytienantrua.UserInterface.Activity.MainActivity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,7 +24,7 @@ import java.util.List;
  * Created by longdg123 on 11/22/2016.
  */
 
-public class FragmentDrawer extends Fragment {
+public class FragmentDrawer extends android.support.v4.app.Fragment {
 
     private static String TAG = FragmentDrawer.class.getSimpleName();
 
@@ -80,9 +78,8 @@ public class FragmentDrawer extends Fragment {
         recyclerView.addOnItemTouchListener(new RecyclerTouchListener(getActivity(), recyclerView, new ClickListener() {
             @Override
             public void onClick(View view, int position) {
-//                drawerListener.onDrawerItemSelected(view, position);
-                ((MainActivity) getActivity()).displayView(position);
-                ((MainActivity) getActivity()).closeMenu();
+                drawerListener.onDrawerItemSelected(view, position);
+                mDrawerLayout.closeDrawer(containerView);
             }
 
             @Override

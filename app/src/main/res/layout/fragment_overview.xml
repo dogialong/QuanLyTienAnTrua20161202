@@ -2,6 +2,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/windowBackground"
     tools:context="com.training.cst.quanlytienantrua.UserInterface.Fragment.FragmentOverview">
 
     <!-- TODO: Update blank fragment layout -->
@@ -43,11 +44,11 @@
                    android:textAlignment="textEnd"
                    />
            </LinearLayout>
-           <ListView
+           <android.support.v7.widget.RecyclerView
                android:layout_width="match_parent"
                android:layout_height="wrap_content"
                android:id="@+id/fragment_overview_lv"
-               ></ListView>
+               ></android.support.v7.widget.RecyclerView>
 
            </LinearLayout>
        <LinearLayout
@@ -78,7 +79,7 @@
                android:textStyle="bold"
                android:textAlignment="textEnd"
                android:background="@drawable/border_textview"
-               />
+               android:id="@+id/fragment_overview_tv_moneytotal" />
        </LinearLayout>
    </RelativeLayout>
 

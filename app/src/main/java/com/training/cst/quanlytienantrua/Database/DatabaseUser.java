@@ -9,6 +9,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 import com.training.cst.quanlytienantrua.DataManager.Object.Account;
 import com.training.cst.quanlytienantrua.DataManager.Object.Person;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -40,15 +41,23 @@ public class DatabaseUser extends SQLiteOpenHelper {
     public static final String COLUMN_NAMEPERSON = "nameperson";
     public static final String COLUMN_DEPARTMENT = "department";
     public static final String COLUMN_NOTE = "note";
+    public static final String COLUMN_PATHAVATAR = "path";
+    public static final String COLUMN_PAY = "pay";
+    public static final String COLUMN_PARCHE = "parche";
+    public static final String COLUMN_AMOUNT = "amout";
     private static final String CREATE_PERSON_TABLE = "CREATE TABLE " + TABLE_PERSON + " (" +
-            COLUMN_ID_PERSON + " INTEGER PRIMARY KEY AUTOCREMENT, " +
+            COLUMN_ID_PERSON + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
             COLUMN_NAMEPERSON + " TEXT," +
             COLUMN_DEPARTMENT + " TEXT," +
-            COLUMN_NOTE + "TEXT);";
+            COLUMN_NOTE + " TEXT," +
+            COLUMN_PATHAVATAR + " TEXT," +
+            COLUMN_PAY + " REAL," +
+            COLUMN_PARCHE + " REAL," +
+            COLUMN_AMOUNT + " REAL);";
 
     public DatabaseUser(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
-        mContext = context;
+        this.mContext = context;
     }
 
 
@@ -85,21 +94,44 @@ public class DatabaseUser extends SQLiteOpenHelper {
         values.put(COLUMN_NAMEPERSON, person.getNamePerson());
         values.put(COLUMN_DEPARTMENT, person.getDepartment());
         values.put(COLUMN_NOTE, person.getNote());
+        values.put(COLUMN_PATHAVATAR,person.getmPathAvatar());
+        values.put(COLUMN_PAY, String.valueOf(person.getPay()));
+        values.put(COLUMN_PARCHE, String.valueOf(person.getParche()));
+        values.put(COLUMN_AMOUNT, String.valueOf(person.getmAmount()));
         rowId = db.insert(TABLE_PERSON, null, values);
         return rowId;
     }
 
-    public int updateAccount(Account account, String where, String... whereArgs) {
+    public int updatePerson(Person person, String where, String... whereArgs) {
         int rowCount = 0;
         SQLiteDatabase db = getWritableDatabase();
         ContentValues values = new ContentValues();
-        values.put(COLUMN_USERNAME, account.getUserName());
-        values.put(COLUMN_PASSWORD, account.getPassword());
-        values.put(COLUMN_REPASSWORD, account.getRePassword());
-        rowCount = db.update(TABLE_ACCOUNT, values, where, whereArgs);
+        values.put(COLUMN_NAMEPERSON, person.getNamePerson());
+        values.put(COLUMN_DEPARTMENT, person.getDepartment());
+        values.put(COLUMN_NOTE, person.getNote());
+        values.put(COLUMN_PATHAVATAR,person.getmPathAvatar());
+        values.put(COLUMN_PAY, String.valueOf(person.getPay()));
+        values.put(COLUMN_PARCHE, String.valueOf(person.getParche()));
+        values.put(COLUMN_AMOUNT, String.valueOf(person.getmAmount()));
+        rowCount = db.update(TABLE_PERSON, values, where, whereArgs);
         return rowCount;
     }
 
+    // Xoa person
+    public int deletePerson(String where, String... whereArgs) {
+        int rowCount = 0;
+        SQLiteDatabase db = getWritableDatabase();
+        rowCount = db.delete(TABLE_PERSON, where, whereArgs);
+        return rowCount;
+    }
+    // Check xem đã trùng tên nhân viên chưa
+    public int checkPerson(String where, String... whereArgs) {
+        int rowCount = 0;
+        SQLiteDatabase db = getReadableDatabase();
+        Cursor cursor = db.query(TABLE_PERSON, null, where, whereArgs, null, null, null);
+        rowCount = cursor.getCount();
+        return rowCount;
+    }
     public int checkAccount(String where, String... whereArgs) {
         int rowCount = 0;
         SQLiteDatabase db = getReadableDatabase();
@@ -109,19 +141,51 @@ public class DatabaseUser extends SQLiteOpenHelper {
     }
 
     // lay ra list person
-    public List<Person> getPerson(String where, String... whereArgs) {
+//    public List<Person> getPerson(String where, String... whereArgs) {
+//        List<Person> listPerson = new ArrayList<>();
+//        SQLiteDatabase db = getReadableDatabase();
+//        Cursor cursor = db.query(TABLE_PERSON, null, where, whereArgs, null, null, null);
+//        while (cursor.moveToNext()) {
+//            String nameperson = cursor.getString(cursor.getColumnIndex(COLUMN_NAMEPERSON));
+//            String department = cursor.getString(cursor.getColumnIndex(COLUMN_DEPARTMENT));
+//            String note = cursor.getString(cursor.getColumnIndex(COLUMN_NOTE));
+//            String path = cursor.getString(cursor.getColumnIndex(COLUMN_PATHAVATAR));
+//            double pay = cursor.getDouble(cursor.getColumnIndex(COLUMN_PAY));
+//            double parche = cursor.getDouble(cursor.getColumnIndex(COLUMN_PARCHE));
+//            double amount = cursor.getDouble(cursor.getColumnIndex(COLUMN_AMOUNT));
+//            Person person = new Person(nameperson, department, note,path, BigDecimal.valueOf(pay),
+//                    BigDecimal.valueOf(parche), BigDecimal.valueOf(amount));
+//            listPerson.add(person);
+//
+//        }
+//        return listPerson;
+//    }
+    // lay ra list person
+    public List<Person> getPerson() {
         List<Person> listPerson = new ArrayList<>();
         SQLiteDatabase db = getReadableDatabase();
-        Cursor cursor = db.query(TABLE_PERSON, null, where, whereArgs, null, null, null);
+        Cursor cursor = db.query(TABLE_PERSON, null, null, null, null, null, null);
         while (cursor.moveToNext()) {
             String nameperson = cursor.getString(cursor.getColumnIndex(COLUMN_NAMEPERSON));
             String department = cursor.getString(cursor.getColumnIndex(COLUMN_DEPARTMENT));
             String note = cursor.getString(cursor.getColumnIndex(COLUMN_NOTE));
-            Person person = new Person(nameperson, department, note);
+            String path = cursor.getString(cursor.getColumnIndex(COLUMN_PATHAVATAR));
+            long pay = cursor.getLong(cursor.getColumnIndex(COLUMN_PAY));
+            long parche =cursor.getLong(cursor.getColumnIndex(COLUMN_PARCHE));
+            long amount = cursor.getLong(cursor.getColumnIndex(COLUMN_AMOUNT));
+            Person person = new Person(nameperson, department, note,path, pay,parche,amount);
             listPerson.add(person);
 
         }
         return listPerson;
+    }
+    // tinh tong so tien cua moi nguoi trong overview fragment
+    public long getTotalMoney(List<Person> listPerson) {
+        long totalMoney = 0;
+            for (int i = 0; i < listPerson.size(); i++) {
+                totalMoney += listPerson.get(i).getmAmount();
+            }
+        return totalMoney;
     }
 
     // Check password
@@ -139,6 +203,22 @@ public class DatabaseUser extends SQLiteOpenHelper {
             password = cursor.getString(cursor.getColumnIndex(KEY_PASSWORD));
             cursor.close();
 
+        }
+        return password;
+    }
+    // check if password right , user wrong
+    public int getRegisterPass(String password1) {
+        int password = 0;
+        SQLiteDatabase db = this.getReadableDatabase();
+        //String selectquery="SELECT * FROM TABLE_REGISTER";
+        Cursor cursor = db.query(TABLE_ACCOUNT, null, COLUMN_PASSWORD + "= ?", new String[]{password1}, null, null, null, null);
+
+        if (cursor.getCount() < 1) {
+            cursor.close();
+            return password;
+        } else if (cursor.getCount() >= 1 && cursor.moveToFirst()) {
+
+            password = 1;
         }
         return password;
     }

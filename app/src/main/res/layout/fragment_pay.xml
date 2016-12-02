@@ -27,16 +27,20 @@
                     android:textSize="@dimen/text_size_big"
                     android:textColor="@color/colorPrimary"
                     android:textStyle="bold"
+                    android:text="Total:"
                     android:background="@drawable/border_textview"
                     />
 
-                <TextView
-                    android:id="@+id/fragment_pay_tv_money"
+                <EditText
+                    android:id="@+id/fragment_pay_et_money"
+                    android:inputType="number"
                     android:layout_weight="1"
                     android:padding="@dimen/padding_text"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:textSize="@dimen/text_size_big"
+                    android:maxLength="13"
+                    android:textAlignment="center"
                     android:textColor="@color/colorPrimary"
                     android:textStyle="bold"
                     android:background="@drawable/border_textview"
@@ -47,6 +51,7 @@
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
                 android:layout_marginTop="18dp"
+                android:background="@drawable/border_textview"
                 >
                 <TextView
                     android:layout_width="match_parent"
@@ -66,9 +71,9 @@
                     android:layout_height="wrap_content"
                     android:textSize="@dimen/text_size_big"
                     android:textColor="@color/colorPrimary"
+                    android:text="a"
                     android:textAlignment="textEnd"
-                    android:padding="@dimen/padding_text"
-                    android:textStyle="bold"
+                    android:paddingEnd="60dp"
                />
             </LinearLayout>
             <android.support.v7.widget.RecyclerView

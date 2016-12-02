@@ -2,6 +2,7 @@ package com.training.cst.quanlytienantrua.UserInterface.Activity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
@@ -11,7 +12,10 @@ import android.widget.Toast;
 
 import com.training.cst.quanlytienantrua.DataManager.Object.Account;
 import com.training.cst.quanlytienantrua.Database.DatabaseUser;
+import com.training.cst.quanlytienantrua.Helper.Contants;
 import com.training.cst.quanlytienantrua.R;
+
+import java.util.regex.Matcher;
 
 public class ActivityLogin extends AppCompatActivity {
     static ActivityLogin mActivityLogin;
@@ -20,6 +24,7 @@ public class ActivityLogin extends AppCompatActivity {
     private EditText etUsernameSignup, etPasswordSignup, etRePasswordSingup;
     private DatabaseUser mDatabaseUser;
     public static final String TAG = "ActivityLogin";
+    boolean doubleBackToExitPressedOnce = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,10 +48,22 @@ public class ActivityLogin extends AppCompatActivity {
                     Intent i = new Intent(ActivityLogin.this, MainActivity.class);
                     startActivity(i);
                     finish();
+                } else if (usernamesignin.equals("") && passworssignin.equals("")) {
+                    etUsernameSignin.setText("");
+                    etPasswordSignin.setText("");
+                    Toast.makeText(ActivityLogin.this, R.string.missing_info, Toast.LENGTH_SHORT).show();
+                } else if (mDatabaseUser.getRegisterPass(passworssignin) == 1){
+                    etUsernameSignin.setText("");
+                    etPasswordSignin.setText("");
+                    Toast.makeText(ActivityLogin.this, R.string.user_wrong, Toast.LENGTH_SHORT).show();
+                } else if (!mDatabaseUser.getRegister(usernamesignin).equals(passworssignin))  {
+                    etUsernameSignin.setText("");
+                    etPasswordSignin.setText("");
+                    Toast.makeText(ActivityLogin.this, R.string.pass_incorrect, Toast.LENGTH_SHORT).show();
                 } else {
                     etUsernameSignin.setText("");
                     etPasswordSignin.setText("");
-                    Toast.makeText(ActivityLogin.this, "Account k hop le", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(ActivityLogin.this, R.string.error_create_person, Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -66,36 +83,46 @@ public class ActivityLogin extends AppCompatActivity {
                         final String username = etUsernameSignup.getText().toString();
                         final String password = etPasswordSignup.getText().toString();
                         final String repassword = etRePasswordSingup.getText().toString();
+                        Matcher matcher = Contants.PATTERN.matcher(username);
+                        Matcher matcher1 = Contants.PATTERN.matcher(password);
+                        Matcher matcher2 = Contants.PATTERN.matcher(repassword);
                         final int countUser = mDatabaseUser.checkAccount(mDatabaseUser.COLUMN_USERNAME + "= ?", new String[]{username});
-                        if (countUser < 1) {
-                            etPasswordSignup.setText("");
-                            etRePasswordSingup.setText("");
-                            etUsernameSignup.setText("");
+                        if (countUser < 1 && matcher.matches()
+                                && matcher1.matches() && matcher2.matches()
+                                && password.equals(repassword)) {
                             mDatabaseUser.insertAccount(new Account(username, password, repassword));
                             Toast.makeText(ActivityLogin.this, "Create Successful", Toast.LENGTH_SHORT).show();
-                            setContentView(R.layout.activity_login);
-                            newInstance().recreate();
-
+                            Intent intent = new Intent(ActivityLogin.this, MainActivity.class);
+                            startActivity(intent);
+                            finish();
+                        } else if (username.equals("") || password.equals("") || repassword.equals("")) {
+                            reset();
+                            Toast.makeText(getApplicationContext(), R.string.missing_info, Toast.LENGTH_SHORT).show();
+                        } else if (username.contains("") || password.contains("")){
+                            reset();
+                            Toast.makeText(getApplicationContext(), R.string.account_has_space, Toast.LENGTH_SHORT).show();
+                        }  else if (!password.equals(repassword)) {
+                           reset();
+                            Toast.makeText(getApplicationContext(), R.string.not_same, Toast.LENGTH_SHORT).show();
                         } else {
-                            etPasswordSignup.setText("");
-                            etRePasswordSingup.setText("");
-                            etUsernameSignup.setText("");
-                            Toast.makeText(ActivityLogin.this, "Account exits", Toast.LENGTH_SHORT).show();
+                            reset();
+                            Toast.makeText(ActivityLogin.this, R.string.other_error, Toast.LENGTH_SHORT).show();
                         }
                     }
                 });
             }
         });
+        overridePendingTransition(R.anim.slide_in, R.anim.slide_out);
+    }
+
+    private void reset() {
+        etPasswordSignup.setText("");
+        etRePasswordSingup.setText("");
+        etUsernameSignup.setText("");
     }
 
     public static ActivityLogin newInstance() {
         return mActivityLogin;
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        Log.d(TAG, "onResume: ");
     }
 
     @Override
@@ -105,20 +132,21 @@ public class ActivityLogin extends AppCompatActivity {
     }
 
     @Override
-    protected void onRestart() {
-        super.onRestart();
-        Log.d(TAG, "onRestart: ");
-    }
+    public void onBackPressed() {
+        if (doubleBackToExitPressedOnce) {
+            super.onBackPressed();
+            return;
+        }
 
-    @Override
-    protected void onPause() {
-        super.onPause();
-        Log.d(TAG, "onPause: ");
-    }
+        this.doubleBackToExitPressedOnce = true;
+        Toast.makeText(this, "Please click BACK again to exit", Toast.LENGTH_SHORT).show();
 
-    @Override
-    protected void onStop() {
-        super.onStop();
-        Log.d(TAG, "onStop: ");
+        new Handler().postDelayed(new Runnable() {
+
+            @Override
+            public void run() {
+                doubleBackToExitPressedOnce = false;
+            }
+        }, 2000);
     }
 }

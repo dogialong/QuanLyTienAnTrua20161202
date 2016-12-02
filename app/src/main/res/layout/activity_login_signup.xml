@@ -40,7 +40,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:inputType="textPersonName"
-        android:hint="User Name"
+        android:hint="Username"
         android:textColor="@color/colorPrimary"
         android:padding="@dimen/padding_text"
         android:ems="10"

@@ -1,36 +1,38 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
     android:orientation="horizontal"
-    android:weightSum="2"
     >
     <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        android:layout_height="45dp"
         android:orientation="horizontal"
-        android:layout_weight="1"
         android:background="@drawable/border_textview"
+        android:focusableInTouchMode="false"
         >
         <CheckBox
             android:id="@+id/fragment_pay_item_recycleview_ckb"
             android:layout_width="48dp"
-            android:layout_height="42dp" />
+            android:layout_height="42dp"
+            android:checked="true"
+            />
         <TextView
             android:id="@+id/fragment_pay_item_recycleview_tv_nameperson"
-            android:layout_width="match_parent"
+            android:layout_width="160dp"
             android:layout_height="wrap_content"
             android:textSize="@dimen/text_size_normal"
             android:textColor="@color/colorPrimary"
             />
     </LinearLayout>
     <TextView
-        android:layout_weight="1"
+        android:id="@+id/fragment_pay_item_rv_money"
+
         android:gravity="center"
         android:textSize="@dimen/text_size_normal"
         android:textColor="@color/colorPrimary"
         android:padding="@dimen/padding_text"
         android:background="@drawable/border_textview"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="45dp" />
 </LinearLayout>
