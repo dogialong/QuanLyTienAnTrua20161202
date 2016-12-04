@@ -27,7 +27,6 @@ import com.training.cst.quanlytienantrua.Database.DatabaseUser;
 import com.training.cst.quanlytienantrua.Helper.Contants;
 import com.training.cst.quanlytienantrua.R;
 
-import java.math.BigDecimal;
 import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -170,6 +169,7 @@ public class FragmentPay extends Fragment {
                     dialog.dismiss();
                     Toast.makeText(getContext(), R.string.pay_success, Toast.LENGTH_SHORT).show();
                 } else {
+                    dialog.dismiss();
                     Toast.makeText(getContext(), R.string.pay_error, Toast.LENGTH_SHORT).show();
                 }
             }

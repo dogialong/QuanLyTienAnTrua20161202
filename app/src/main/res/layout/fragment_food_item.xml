@@ -16,29 +16,39 @@
         android:background="#ffcc0000">
 
         <Button
-            android:id="@+id/fragment_people_item_rv_btn_delete"
+            android:id="@+id/fragment_food_item_rv_btn_delete"
             android:layout_width="70dp"
             android:layout_height="match_parent"
             android:gravity="center"
             android:background="@android:color/holo_red_dark"
             android:textColor="@android:color/white"
             android:text="Delete"/>
+        <Button
+            android:id="@+id/fragment_food_item_rv_btn_sua"
+            android:layout_width="70dp"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:background="@android:color/holo_red_dark"
+            android:textColor="@android:color/white"
+            android:text="Modify"/>
     </FrameLayout>
 
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="70dp">
-        <ImageView
-            android:id="@+id/fragment_people_item_rv_iv"
-            android:layout_width="90dp"
-            android:layout_height="70dp" />
         <TextView
-            android:id="@+id/fragment_people_item_rv_tv_name"
+            android:id="@+id/fragment_food_item_rv_tv_name"
             android:layout_width="150dp"
             android:layout_height="70dp"
             android:textSize="18sp"
-            android:gravity="center"
-            android:layout_gravity="center"
+            android:layout_gravity="left"
+            android:textColor="@color/colorPrimaryDark"/>
+        <TextView
+            android:id="@+id/fragment_food_item_rv_tv_price"
+            android:layout_width="150dp"
+            android:layout_height="70dp"
+            android:textSize="18sp"
+            android:layout_gravity="right"
             android:textColor="@color/colorPrimaryDark"/>
     </FrameLayout>
 </com.chauthai.swipereveallayout.SwipeRevealLayout>

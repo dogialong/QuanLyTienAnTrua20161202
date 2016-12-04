@@ -2,6 +2,7 @@ package com.training.cst.quanlytienantrua.UserInterface.Fragment;
 
 import android.app.Dialog;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -54,6 +55,22 @@ public class FragmentPeople extends Fragment {
     private void setUpRecycleView(final RecyclerView rv) {
         rv.setLayoutManager(new LinearLayoutManager(rv.getContext()));
         rv.setAdapter(mFragmentPersonAdapter);
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        if (mFragmentPersonAdapter!=null ) {
+            mFragmentPersonAdapter.saveStates(outState);
+        }
+    }
+
+    @Override
+    public void onViewStateRestored(@Nullable Bundle savedInstanceState) {
+        super.onViewStateRestored(savedInstanceState);
+        if (mFragmentPersonAdapter != null ) {
+            mFragmentPersonAdapter.restoreStates(savedInstanceState);
+        }
     }
 
     @Override

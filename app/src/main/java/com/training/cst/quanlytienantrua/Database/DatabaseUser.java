@@ -7,9 +7,9 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
 import com.training.cst.quanlytienantrua.DataManager.Object.Account;
+import com.training.cst.quanlytienantrua.DataManager.Object.Food;
 import com.training.cst.quanlytienantrua.DataManager.Object.Person;
 
-import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -54,7 +54,15 @@ public class DatabaseUser extends SQLiteOpenHelper {
             COLUMN_PAY + " REAL," +
             COLUMN_PARCHE + " REAL," +
             COLUMN_AMOUNT + " REAL);";
-
+    // Cac thong tin ve mon an
+    public static final String TABLE_FOOD = "food";
+    public static final String COLUMN_ID_FOOD = "_idfood";
+    public static final String COLUMN_NAMEFOOD = "namefood";
+    public static final String COLUMN_PRICE = "pricefood";
+    private static final String CREATE_FOOD_TABLE = "CREATE TABLE " + TABLE_FOOD + " (" +
+            COLUMN_ID_FOOD + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
+            COLUMN_NAMEFOOD + " TEXT," +
+            COLUMN_PRICE + " REAL);";
     public DatabaseUser(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
         this.mContext = context;
@@ -65,12 +73,14 @@ public class DatabaseUser extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase db) {
         db.execSQL(CREATE_ACCOUNT_TABLE);
         db.execSQL(CREATE_PERSON_TABLE);
+        db.execSQL(CREATE_FOOD_TABLE);
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         db.execSQL("drop table if exists " + TABLE_ACCOUNT);
         db.execSQL("drop table if exists " + TABLE_PERSON);
+        db.execSQL("drop table if exists " + TABLE_FOOD);
         onCreate(db);
     }
 
@@ -141,26 +151,6 @@ public class DatabaseUser extends SQLiteOpenHelper {
     }
 
     // lay ra list person
-//    public List<Person> getPerson(String where, String... whereArgs) {
-//        List<Person> listPerson = new ArrayList<>();
-//        SQLiteDatabase db = getReadableDatabase();
-//        Cursor cursor = db.query(TABLE_PERSON, null, where, whereArgs, null, null, null);
-//        while (cursor.moveToNext()) {
-//            String nameperson = cursor.getString(cursor.getColumnIndex(COLUMN_NAMEPERSON));
-//            String department = cursor.getString(cursor.getColumnIndex(COLUMN_DEPARTMENT));
-//            String note = cursor.getString(cursor.getColumnIndex(COLUMN_NOTE));
-//            String path = cursor.getString(cursor.getColumnIndex(COLUMN_PATHAVATAR));
-//            double pay = cursor.getDouble(cursor.getColumnIndex(COLUMN_PAY));
-//            double parche = cursor.getDouble(cursor.getColumnIndex(COLUMN_PARCHE));
-//            double amount = cursor.getDouble(cursor.getColumnIndex(COLUMN_AMOUNT));
-//            Person person = new Person(nameperson, department, note,path, BigDecimal.valueOf(pay),
-//                    BigDecimal.valueOf(parche), BigDecimal.valueOf(amount));
-//            listPerson.add(person);
-//
-//        }
-//        return listPerson;
-//    }
-    // lay ra list person
     public List<Person> getPerson() {
         List<Person> listPerson = new ArrayList<>();
         SQLiteDatabase db = getReadableDatabase();
@@ -221,5 +211,35 @@ public class DatabaseUser extends SQLiteOpenHelper {
             password = 1;
         }
         return password;
+    }
+
+    // them 1 mon an
+    public long insertFood (Food food) {
+        long rowId = 0;
+        SQLiteDatabase db = getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put(COLUMN_NAMEFOOD, food.getNameFood());
+        values.put(COLUMN_PRICE, food.getPriceFood());
+        rowId = db.insert(TABLE_FOOD, null, values);
+        return rowId;
+    }
+
+    // xoa 1 mon an
+    public int deleteFood (String where, String... whereArgs) {
+        int rowCount = 0;
+        SQLiteDatabase db = getWritableDatabase();
+        rowCount = db.delete(TABLE_FOOD, where, whereArgs);
+        return rowCount;
+    }
+
+    // sua 1 mon an
+    public int updateFood (Food food, String where, String... whereArgs) {
+        int rowCount = 0;
+        SQLiteDatabase db = getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put(COLUMN_NAMEFOOD, food.getNameFood());
+        values.put(COLUMN_PRICE, food.getPriceFood());
+        rowCount = db.update(TABLE_PERSON, values, where, whereArgs);
+        return rowCount;
     }
 }
