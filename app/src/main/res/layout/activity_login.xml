@@ -27,6 +27,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:hint="Username"
+        android:fontFamily="sans-serif"
         android:textColor="@color/colorPrimary"
         android:padding="@dimen/padding_text"
         android:ems="10"

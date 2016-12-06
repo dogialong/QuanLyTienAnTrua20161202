@@ -8,8 +8,10 @@
     <string name="account_has_space">User or password not allowed has space</string>
     <string name="nav_item_overview">Overview</string>
     <string name="nav_item_pay">Pay</string>
+    <string name="nav_item_pay_baseon">Pay Base On Food</string>
     <string name="nav_item_recharge">Recharge</string>
     <string name="nav_item_people">People</string>
+    <string name="nav_item_food">Food</string>
     <string name="nav_item_warning">Warning</string>
     <string name="nav_item_logout">Logout</string>
     <string name="error_create_person">Incorrect account. Please try again</string>
@@ -22,23 +24,30 @@
     <string name="add_person_error">Add person failed</string>
     <string name="pay_success">Pay success</string>
     <string name="pay_error">Pay failed</string>
+    <string name="food_delete_success">Delete food success</string>
+    <string name="food_delete_fail">Delete food failed</string>
     <string name="recharge_success">Recharge success</string>
     <string name="recharge_falied">Recharge failed</string>
     <string name="delete_person_success">Delete person success</string>
+    <string name="custom_spinner">Custom spinner</string>
     <!-- navigation drawer item labels  -->
     <string-array name="nav_drawer_labels">
         <item>@string/nav_item_overview</item>
         <item>@string/nav_item_pay</item>
+        <item>@string/nav_item_pay_baseon</item>
         <item>@string/nav_item_recharge</item>
         <item>@string/nav_item_people</item>
+        <item>@string/nav_item_food</item>
         <item>@string/nav_item_warning</item>
         <item>@string/nav_item_logout</item>
     </string-array>
 
     <string name="title_pay">Pay</string>
+    <string name="title_paybaseon">Pay base on food</string>
     <string name="title_recharge">Recharge</string>
     <string name="title_overview">Overview</string>
     <string name="title_people">People</string>
+    <string name="title_food">Food</string>
     <string name="title_warning">Warning</string>
     <string name="title_logout">Logout</string>
 

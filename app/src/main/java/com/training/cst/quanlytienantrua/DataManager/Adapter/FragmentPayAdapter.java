@@ -51,6 +51,7 @@ public class FragmentPayAdapter extends RecyclerView.Adapter<FragmentPayAdapter.
                 itemClickListener.clickItemListtener(v,position);
             }
         });
+        holder.chkPay.setChecked(true);
     }
 
 

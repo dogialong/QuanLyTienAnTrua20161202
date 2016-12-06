@@ -19,9 +19,11 @@ import android.widget.Toast;
 
 import com.training.cst.quanlytienantrua.R;
 import com.training.cst.quanlytienantrua.UserInterface.Fragment.FragmentDrawer;
+import com.training.cst.quanlytienantrua.UserInterface.Fragment.FragmentFood;
 import com.training.cst.quanlytienantrua.UserInterface.Fragment.FragmentLogout;
 import com.training.cst.quanlytienantrua.UserInterface.Fragment.FragmentOverview;
 import com.training.cst.quanlytienantrua.UserInterface.Fragment.FragmentPay;
+import com.training.cst.quanlytienantrua.UserInterface.Fragment.FragmentPayBasedOnFood;
 import com.training.cst.quanlytienantrua.UserInterface.Fragment.FragmentPeople;
 import com.training.cst.quanlytienantrua.UserInterface.Fragment.FragmentRecharge;
 import com.training.cst.quanlytienantrua.UserInterface.Fragment.FragmentWarning;
@@ -94,18 +96,26 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
                 title = getString(R.string.title_pay);
                 break;
             case 2:
+                fragment = new FragmentPayBasedOnFood();
+                title = getString(R.string.title_paybaseon);
+                break;
+            case 3:
                 fragment = new FragmentRecharge();
                 title = getString(R.string.title_recharge);
                 break;
-            case 3:
+            case 4:
                 fragment = new FragmentPeople();
                 title = getString(R.string.title_people);
                 break;
-            case 4:
+            case 5:
+                fragment = new FragmentFood();
+                title= getString(R.string.title_food);
+                break;
+            case 6:
                 fragment = new FragmentWarning();
                 title = getString(R.string.title_warning);
                 break;
-            case 5:
+            case 7:
                 fragment = new FragmentLogout();
                 title = getString(R.string.title_logout);
                 break;

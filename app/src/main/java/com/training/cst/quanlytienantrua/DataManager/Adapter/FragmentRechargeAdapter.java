@@ -51,6 +51,7 @@ public class FragmentRechargeAdapter extends RecyclerView.Adapter<FragmentRechar
                 itemClickListener.clickItemListtener(v,position);
             }
         });
+        holder.chkRecharge.setChecked(true);
     }
 
 

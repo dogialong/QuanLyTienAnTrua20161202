@@ -48,7 +48,10 @@ public class ActivityLogin extends AppCompatActivity {
                     Intent i = new Intent(ActivityLogin.this, MainActivity.class);
                     startActivity(i);
                     finish();
-                } else if (usernamesignin.equals("") && passworssignin.equals("")) {
+                } else if (usernamesignin.equals("") && passworssignin.equals("")
+                        || mDatabaseUser.checkAccount(
+                        mDatabaseUser.COLUMN_USERNAME + "=?"
+                        , new String[]{usernamesignin})>0 && passworssignin.equals("")) {
                     etUsernameSignin.setText("");
                     etPasswordSignin.setText("");
                     Toast.makeText(ActivityLogin.this, R.string.missing_info, Toast.LENGTH_SHORT).show();
@@ -114,7 +117,6 @@ public class ActivityLogin extends AppCompatActivity {
         });
         overridePendingTransition(R.anim.slide_in, R.anim.slide_out);
     }
-
     private void reset() {
         etPasswordSignup.setText("");
         etRePasswordSingup.setText("");

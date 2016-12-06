@@ -20,6 +20,7 @@
         android:textColor="@color/colorPrimary"
         android:ems="10"
         android:inputType="textPassword"
+        android:fontFamily="sans-serif"
         android:id="@+id/activity_login_signup_ed_pass"
         android:layout_alignTop="@+id/activity_login_signup_ed_name"
         android:layout_alignStart="@+id/activity_login_signup_ed_name" />
@@ -30,7 +31,8 @@
         android:inputType="textPassword"
         android:padding="@dimen/padding_text"
         android:ems="10"
-        android:hint="Re - Password"
+        android:hint="Re-Password"
+        android:fontFamily="sans-serif"
         android:layout_below="@+id/activity_login_signup_ed_pass"
         android:layout_alignEnd="@+id/activity_login_signup_ed_pass"
         android:layout_marginTop="30dp"
@@ -44,13 +46,14 @@
         android:textColor="@color/colorPrimary"
         android:padding="@dimen/padding_text"
         android:ems="10"
+        android:fontFamily="sans-serif"
         android:id="@+id/activity_login_signup_ed_name"
         android:layout_marginTop="51dp"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true" />
 
     <Button
-        android:text="Sign in"
+        android:text="Sign up"
         android:textColor="@color/windowBackground"
         android:layout_width="200dp"
         android:padding="@dimen/padding_text"

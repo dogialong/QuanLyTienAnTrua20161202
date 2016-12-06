@@ -242,4 +242,27 @@ public class DatabaseUser extends SQLiteOpenHelper {
         rowCount = db.update(TABLE_PERSON, values, where, whereArgs);
         return rowCount;
     }
+    // lay ra cac mon an
+    public List<Food> getFood() {
+        List<Food> listFood = new ArrayList<>();
+        SQLiteDatabase db = getReadableDatabase();
+        Cursor cursor = db.query(TABLE_FOOD, null, null, null, null, null, null);
+        while (cursor.moveToNext()) {
+            String nameFood = cursor.getString(cursor.getColumnIndex(COLUMN_NAMEFOOD));
+            long priceFood = cursor.getLong(cursor.getColumnIndex(COLUMN_PRICE));
+            Food food = new Food(nameFood, priceFood);
+            listFood.add(food);
+
+        }
+        return listFood;
+    }
+    // Check xem đã trùng tên nhân viên chưa
+    public int checkFood(String where, String... whereArgs) {
+        int rowCount = 0;
+        SQLiteDatabase db = getReadableDatabase();
+        Cursor cursor = db.query(TABLE_FOOD, null, where, whereArgs, null, null, null);
+        rowCount = cursor.getCount();
+        return rowCount;
+    }
+
 }
