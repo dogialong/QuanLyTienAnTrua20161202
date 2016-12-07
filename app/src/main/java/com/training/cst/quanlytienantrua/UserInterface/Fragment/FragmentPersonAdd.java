@@ -36,7 +36,6 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -225,7 +224,9 @@ public class FragmentPersonAdd extends Fragment {
                     List<Person> listPer = new ArrayList<>();
                     Toast.makeText(getContext(), R.string.add_person_success, Toast.LENGTH_SHORT).show();
                     listPer = mDatabaseUser.getPerson();
-                    ((MainActivity) getActivity()).displayView(3);
+                    ((MainActivity) getActivity()).displayView(4);
+                }   else if (nameperson.equals("")&& department.equals("") && note.equals("")) {
+                    Toast.makeText(getContext(), R.string.missing_info, Toast.LENGTH_SHORT).show();
                 } else if (countPerson < 1 && matcher.matches() && department.equals("")
                         || countPerson < 1 && matcher.matches()&& note.equals("")){
                     mDatabaseUser.insertPerson(new Person(nameperson, department, note, filePath,
@@ -233,7 +234,7 @@ public class FragmentPersonAdd extends Fragment {
                     List<Person> listPer = new ArrayList<>();
                     Toast.makeText(getContext(), R.string.add_person_success, Toast.LENGTH_SHORT).show();
                     listPer = mDatabaseUser.getPerson();
-                    ((MainActivity) getActivity()).displayView(3);
+                    ((MainActivity) getActivity()).displayView(4);
                 }
                 else {
                     Toast.makeText(getContext(), R.string.error_create_person, Toast.LENGTH_SHORT).show();

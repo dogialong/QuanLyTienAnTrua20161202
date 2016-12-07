@@ -142,17 +142,18 @@ public class FragmentFood extends Fragment {
             public void onClick(View v) {
                 // save food.
                 String nameFood = etNameFood.getText().toString();
-                long priceFood = Long.parseLong(Contants.replaceSymbol(etPriceFood.getText().toString()));
                 nameFood = Contants.formatInfoperson(nameFood);
                 Matcher matcher = Contants.PATTERN.matcher(nameFood);
                 final int countFood = mDatabaseUser.checkFood(mDatabaseUser.COLUMN_NAMEFOOD + "= ?", new String[]{nameFood});
-                if (countFood < 1 && matcher.matches()) {
+                if (countFood < 1 && matcher.matches() && !nameFood.equals("")
+                        && !etPriceFood.getText().toString().equals("")) {
+                    long priceFood = Long.parseLong(Contants.replaceSymbol(etPriceFood.getText().toString()));
                     mDatabaseUser.insertFood(new Food(nameFood, priceFood));
                     mFragmentFoodAdapter.setmListFood(mDatabaseUser.getFood());
-                    Toast.makeText(getContext(), R.string.add_person_success, Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getContext(), R.string.add_food_success, Toast.LENGTH_SHORT).show();
                 }
                 else {
-                    Toast.makeText(getContext(), R.string.error_create_person, Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getContext(), R.string.missing_info, Toast.LENGTH_SHORT).show();
                 }
                 dialog.dismiss();
             }

@@ -102,7 +102,6 @@ public class FragmentPay extends Fragment {
                         if (!mListPosition.contains(possition)) {
                             mListPosition.add(possition);
                             Collections.sort(mListPosition);
-                            Toast.makeText(getContext(), mListPosition + "", Toast.LENGTH_SHORT).show();
                         }
                     } else {
                         mListPosition.remove(mListPosition.indexOf(possition));
@@ -167,9 +166,8 @@ public class FragmentPay extends Fragment {
                         mDatabaseUser.updatePerson(person, mDatabaseUser.COLUMN_NAMEPERSON + " = ?",
                                 new String[]{mListPerson.get(mListPosition.get(i)).getNamePerson()});
                         mFragmentPayAdapter.loadNewList(mDatabaseUser.getPerson());
-                        Toast.makeText(getContext(), mListPosition +"", Toast.LENGTH_SHORT).show();
-
                     }
+                    initPosition();
                     dialog.dismiss();
                     Toast.makeText(getContext(), R.string.pay_success, Toast.LENGTH_SHORT).show();
                 } else {

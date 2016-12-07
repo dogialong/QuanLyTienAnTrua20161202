@@ -264,5 +264,20 @@ public class DatabaseUser extends SQLiteOpenHelper {
         rowCount = cursor.getCount();
         return rowCount;
     }
+    // lay ra price cua food
+    public long getPriceFood(String nameFood) {
+        long nameFood1 = 0;
+        SQLiteDatabase db = this.getReadableDatabase();
+        //String selectquery="SELECT * FROM TABLE_REGISTER";
+        Cursor cursor = db.query(TABLE_FOOD, null, COLUMN_NAMEFOOD + "= ?", new String[]{nameFood}, null, null, null, null);
 
+        if (cursor.getCount() < 1) {
+            cursor.close();
+            return nameFood1;
+        } else if (cursor.getCount() >= 1 && cursor.moveToFirst()) {
+
+            nameFood1 = cursor.getLong(cursor.getColumnIndex(COLUMN_PRICE));
+        }
+        return nameFood1;
+    }
 }

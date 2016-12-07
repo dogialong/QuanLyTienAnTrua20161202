@@ -1,7 +1,5 @@
 package com.training.cst.quanlytienantrua.DataManager.Object;
 
-import java.math.BigDecimal;
-
 /**
  * Created by longdg123 on 11/23/2016.
  */
@@ -24,7 +22,6 @@ public class Person {
         this.mParche = mParche;
         this.mAmount = amout;
     }
-
 
     public long getmAmount() {
         return this.mAmount;

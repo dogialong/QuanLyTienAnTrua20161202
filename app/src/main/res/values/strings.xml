@@ -21,6 +21,7 @@
     <string name="not_same">Repassword not same password</string>
     <string name="other_error">Account exits or wrong input</string>
     <string name="add_person_success">Add person success</string>
+    <string name="add_food_success">Add food success</string>
     <string name="add_person_error">Add person failed</string>
     <string name="pay_success">Pay success</string>
     <string name="pay_error">Pay failed</string>

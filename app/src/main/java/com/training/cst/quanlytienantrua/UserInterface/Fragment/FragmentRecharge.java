@@ -27,7 +27,6 @@ import com.training.cst.quanlytienantrua.Database.DatabaseUser;
 import com.training.cst.quanlytienantrua.Helper.Contants;
 import com.training.cst.quanlytienantrua.R;
 
-import java.math.BigDecimal;
 import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -186,7 +185,8 @@ public class FragmentRecharge extends Fragment {
                                 (Long.parseLong(Contants.replaceSymbol
                                         (etAmount.getText().toString()))*mListPosition.size()),"",moneyCurrent));
                     }
-                    Toast.makeText(getContext(), BigDecimal.valueOf(Long.parseLong(Contants.replaceSymbol(etAmount.getText().toString())))+"", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getContext(), R.string.recharge_success, Toast.LENGTH_SHORT).show();
+                    initPosition();
                 } else {
                     Toast.makeText(getContext(), R.string.recharge_falied, Toast.LENGTH_SHORT).show();
                 }
