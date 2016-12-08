@@ -5,9 +5,11 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
 
 import com.training.cst.quanlytienantrua.DataManager.Object.Account;
 import com.training.cst.quanlytienantrua.DataManager.Object.Food;
+import com.training.cst.quanlytienantrua.DataManager.Object.History;
 import com.training.cst.quanlytienantrua.DataManager.Object.Person;
 
 import java.util.ArrayList;
@@ -45,6 +47,9 @@ public class DatabaseUser extends SQLiteOpenHelper {
     public static final String COLUMN_PAY = "pay";
     public static final String COLUMN_PARCHE = "parche";
     public static final String COLUMN_AMOUNT = "amout";
+    public static final String COLUMN_SUMPAY = "sumpay";
+    public static final String COLUMN_DATE = "date";
+
     private static final String CREATE_PERSON_TABLE = "CREATE TABLE " + TABLE_PERSON + " (" +
             COLUMN_ID_PERSON + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
             COLUMN_NAMEPERSON + " TEXT," +
@@ -53,7 +58,9 @@ public class DatabaseUser extends SQLiteOpenHelper {
             COLUMN_PATHAVATAR + " TEXT," +
             COLUMN_PAY + " REAL," +
             COLUMN_PARCHE + " REAL," +
-            COLUMN_AMOUNT + " REAL);";
+            COLUMN_AMOUNT + " REAL," +
+            COLUMN_SUMPAY + " REAL," +
+            COLUMN_DATE + " DATE);";
     // Cac thong tin ve mon an
     public static final String TABLE_FOOD = "food";
     public static final String COLUMN_ID_FOOD = "_idfood";
@@ -63,24 +70,38 @@ public class DatabaseUser extends SQLiteOpenHelper {
             COLUMN_ID_FOOD + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
             COLUMN_NAMEFOOD + " TEXT," +
             COLUMN_PRICE + " REAL);";
+//     Cac thong tin de luu lich su
+    public static final String TABLE_HISTORY = "history";
+    public static final String COLUMN_ID_HISTORY = "_idhistory";
+    public static final String COLUMN_NAME_HISTORY = "namehistory";
+    public static final String COLUMN_PAY_HISTORY = "payhistory";
+    public static final String COLUMN_AMOUNT_HISTORY = "amounthistory";
+    public static final String COLUMN_DAY = "_day";
+    private static final String CREATE_HISTORY_TABLE = "CREATE TABLE " + TABLE_HISTORY + " (" +
+            COLUMN_ID_HISTORY + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
+            COLUMN_NAME_HISTORY + " TEXT," +
+            COLUMN_PAY_HISTORY + " REAL," +
+            COLUMN_AMOUNT_HISTORY + " REAL," +
+            COLUMN_DAY +" DATE);";
+
     public DatabaseUser(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
         this.mContext = context;
     }
-
 
     @Override
     public void onCreate(SQLiteDatabase db) {
         db.execSQL(CREATE_ACCOUNT_TABLE);
         db.execSQL(CREATE_PERSON_TABLE);
         db.execSQL(CREATE_FOOD_TABLE);
+        db.execSQL(CREATE_HISTORY_TABLE);
     }
-
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         db.execSQL("drop table if exists " + TABLE_ACCOUNT);
         db.execSQL("drop table if exists " + TABLE_PERSON);
         db.execSQL("drop table if exists " + TABLE_FOOD);
+        db.execSQL("drop table if exists " + TABLE_HISTORY);
         onCreate(db);
     }
 
@@ -108,6 +129,8 @@ public class DatabaseUser extends SQLiteOpenHelper {
         values.put(COLUMN_PAY, String.valueOf(person.getPay()));
         values.put(COLUMN_PARCHE, String.valueOf(person.getParche()));
         values.put(COLUMN_AMOUNT, String.valueOf(person.getmAmount()));
+        values.put(COLUMN_SUMPAY,String.valueOf(person.getmSumPay()));
+        values.put(COLUMN_DATE,String.valueOf(person.getmDate()));
         rowId = db.insert(TABLE_PERSON, null, values);
         return rowId;
     }
@@ -123,6 +146,8 @@ public class DatabaseUser extends SQLiteOpenHelper {
         values.put(COLUMN_PAY, String.valueOf(person.getPay()));
         values.put(COLUMN_PARCHE, String.valueOf(person.getParche()));
         values.put(COLUMN_AMOUNT, String.valueOf(person.getmAmount()));
+        values.put(COLUMN_SUMPAY, String.valueOf(person.getmSumPay()));
+        values.put(COLUMN_DATE, String.valueOf(person.getmDate()));
         rowCount = db.update(TABLE_PERSON, values, where, whereArgs);
         return rowCount;
     }
@@ -163,7 +188,9 @@ public class DatabaseUser extends SQLiteOpenHelper {
             long pay = cursor.getLong(cursor.getColumnIndex(COLUMN_PAY));
             long parche =cursor.getLong(cursor.getColumnIndex(COLUMN_PARCHE));
             long amount = cursor.getLong(cursor.getColumnIndex(COLUMN_AMOUNT));
-            Person person = new Person(nameperson, department, note,path, pay,parche,amount);
+            long sumpay = cursor.getLong(cursor.getColumnIndex(COLUMN_SUMPAY));
+            String date = cursor.getString(cursor.getColumnIndex(COLUMN_DATE));
+            Person person = new Person(nameperson, department, note,path, pay,parche,amount,sumpay,date);
             listPerson.add(person);
 
         }
@@ -279,5 +306,70 @@ public class DatabaseUser extends SQLiteOpenHelper {
             nameFood1 = cursor.getLong(cursor.getColumnIndex(COLUMN_PRICE));
         }
         return nameFood1;
+    }
+    // luu lai 1 lich su
+    public long insertHistory (History history) {
+        long rowId = 0;
+        SQLiteDatabase db = getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put(COLUMN_NAME_HISTORY, history.getNamePerson());
+        values.put(COLUMN_PAY_HISTORY, history.getmPay());
+        values.put(COLUMN_AMOUNT_HISTORY, history.getmAmount());
+        values.put(COLUMN_DAY, history.getmDate());
+        rowId = db.insert(TABLE_HISTORY, null, values);
+        return rowId;
+    }
+    // lay ra cac lich su
+    // lay ra cac mon an
+    public List<History> getHistory() {
+        List<History> listHistory = new ArrayList<>();
+        SQLiteDatabase db = getReadableDatabase();
+        Cursor cursor = db.query(TABLE_HISTORY, null, null, null, null, null, null);
+        while (cursor.moveToNext()) {
+            String nameHistory = cursor.getString(cursor.getColumnIndex(COLUMN_NAME_HISTORY));
+            long sumPay = cursor.getLong(cursor.getColumnIndex(COLUMN_PAY_HISTORY));
+            long amount = cursor.getLong(cursor.getColumnIndex(COLUMN_AMOUNT_HISTORY));
+            String date = cursor.getString(cursor.getColumnIndex(COLUMN_DAY));
+            History history = new History(nameHistory, sumPay,amount,date);
+            listHistory.add(history);
+
+        }
+        return listHistory;
+    }
+    //lay ra cac ngay thang
+    public List<String> getAllDate () {
+        List<String> listString = new ArrayList<>();
+        SQLiteDatabase db = this.getReadableDatabase();
+        String query = "Select " + COLUMN_DAY + " from " + TABLE_HISTORY + " group by " + COLUMN_DAY;
+        Cursor cursor = db.rawQuery(query,null);
+        if(cursor.moveToFirst() != true) {
+            listString.add("Nothing");
+        } else {
+            while (cursor.isAfterLast() == false) {
+                listString.add(cursor.getString(cursor.getColumnIndex(COLUMN_DAY)));
+                cursor.moveToNext();
+            }
+        }
+        return listString;
+    }
+    // lay ra lich su theo tung ngay
+
+    public List<History> getHistoryByDate(String date) {
+        List<History> listHistory = new ArrayList<>();
+        SQLiteDatabase db = this.getReadableDatabase();
+        String selectquery="SELECT namehistory,amounthistory,SUM(payhistory) AS payhistory,_day" +
+                " FROM history where _day = " + "\"" + date + "\""  +" GROUP BY _day, namehistory ORDER BY _day, namehistory ";
+        Cursor cursor = db.rawQuery(selectquery,null);
+        while (cursor.moveToNext()) {
+            String nameHistory = cursor.getString(cursor.getColumnIndex(COLUMN_NAME_HISTORY));
+            long sumPay = cursor.getLong(cursor.getColumnIndex(COLUMN_PAY_HISTORY));
+            long amount = cursor.getLong(cursor.getColumnIndex(COLUMN_AMOUNT_HISTORY));
+            String datehis = cursor.getString(cursor.getColumnIndex(COLUMN_DAY));
+            History history = new History(nameHistory, sumPay,amount,datehis);
+            listHistory.add(history);
+            Log.d("ahi", "getHistoryByDate: " + selectquery);
+        }
+        return listHistory;
+
     }
 }

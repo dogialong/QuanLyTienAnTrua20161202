@@ -20,12 +20,12 @@ import android.widget.Toast;
 import com.training.cst.quanlytienantrua.R;
 import com.training.cst.quanlytienantrua.UserInterface.Fragment.FragmentDrawer;
 import com.training.cst.quanlytienantrua.UserInterface.Fragment.FragmentFood;
+import com.training.cst.quanlytienantrua.UserInterface.Fragment.FragmentHistory;
 import com.training.cst.quanlytienantrua.UserInterface.Fragment.FragmentOverview;
 import com.training.cst.quanlytienantrua.UserInterface.Fragment.FragmentPay;
 import com.training.cst.quanlytienantrua.UserInterface.Fragment.FragmentPayBasedOnFood;
 import com.training.cst.quanlytienantrua.UserInterface.Fragment.FragmentPeople;
 import com.training.cst.quanlytienantrua.UserInterface.Fragment.FragmentRecharge;
-import com.training.cst.quanlytienantrua.UserInterface.Fragment.FragmentHistory;
 import com.training.cst.quanlytienantrua.UserInterface.Fragment.FragmentWarning;
 
 ;
@@ -117,8 +117,12 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
                 break;
             case 7:
                 fragment = new FragmentHistory();
-                title = getString(R.string.title_logout);
+                title = getString(R.string.title_history);
                 break;
+//            case 8:
+//                fragment = new FragmentLogout();
+//                title = getString(R.string.title_logout);
+//                break;
             default:
                 break;
         }

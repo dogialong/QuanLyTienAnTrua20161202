@@ -21,13 +21,17 @@ import com.training.cst.quanlytienantrua.DataManager.Adapter.FragmentPayFoodAdap
 import com.training.cst.quanlytienantrua.DataManager.Adapter.ItemClickListener;
 import com.training.cst.quanlytienantrua.DataManager.Adapter.SpinnerAdapter;
 import com.training.cst.quanlytienantrua.DataManager.Object.Food;
+import com.training.cst.quanlytienantrua.DataManager.Object.History;
 import com.training.cst.quanlytienantrua.DataManager.Object.Person;
 import com.training.cst.quanlytienantrua.Database.DatabaseUser;
 import com.training.cst.quanlytienantrua.R;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 /**
  * Created by longdg on 05/12/2016.
@@ -69,11 +73,9 @@ public class FragmentPayBasedOnFood extends Fragment {
                                 if (!mListPositionCkb.contains(possition)) {
                                     mListPositionCkb.add(possition);
                                     Collections.sort(mListPositionCkb);
-                                    Toast.makeText(getContext(), mListPositionCkb+"", Toast.LENGTH_SHORT).show();
                                 }
                             } else {
                                 mListPositionCkb.remove(mListPositionCkb.indexOf(possition));
-                                Toast.makeText(getContext(), mListPositionCkb + "", Toast.LENGTH_SHORT).show();
                             }
                         } catch (IndexOutOfBoundsException i) {
                             Toast.makeText(getContext(), "err", Toast.LENGTH_SHORT).show();
@@ -113,7 +115,6 @@ public class FragmentPayBasedOnFood extends Fragment {
                         }
                     } else {
                         mListPosition.remove(mListPosition.indexOf(possition));
-                        Toast.makeText(getContext(), mListPosition + "", Toast.LENGTH_SHORT).show();
                     }
                     StringBuilder stringBuilder = new StringBuilder();
                     if (mListPosition.size() > 0) {
@@ -176,6 +177,8 @@ public class FragmentPayBasedOnFood extends Fragment {
 
                                     mDatabaseUser.updatePerson(person, mDatabaseUser.COLUMN_NAMEPERSON + " = ?",
                                             new String[]{mListPerson.get(mListPositionCkb.get(i)).getNamePerson()});
+                                    mDatabaseUser.insertHistory(new History(person.getNamePerson(),person.getPay(),
+                                            person.getmAmount(),getDateTime()));
                                     dialog.dismiss();
                                     Toast.makeText(getContext(), R.string.pay_success, Toast.LENGTH_SHORT).show();
                                 } else {
@@ -210,5 +213,11 @@ public class FragmentPayBasedOnFood extends Fragment {
         rv.setLayoutManager(new LinearLayoutManager(rv.getContext()));
         rv.setAdapter(mFragmentPayFoodAdapter);
 
+    }
+    private String getDateTime() {
+        SimpleDateFormat dateFormat = new SimpleDateFormat(
+                "yyyy-MM-dd", Locale.getDefault());
+        Date date = new Date();
+        return dateFormat.format(date);
     }
 }

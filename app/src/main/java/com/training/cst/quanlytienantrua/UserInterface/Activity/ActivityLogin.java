@@ -59,7 +59,8 @@ public class ActivityLogin extends AppCompatActivity {
                     etUsernameSignin.setText("");
                     etPasswordSignin.setText("");
                     Toast.makeText(ActivityLogin.this, R.string.user_wrong, Toast.LENGTH_SHORT).show();
-                } else if (!mDatabaseUser.getRegister(usernamesignin).equals(passworssignin))  {
+                } else if (mDatabaseUser.checkAccount(mDatabaseUser.COLUMN_USERNAME + "=?",
+                        new String[]{usernamesignin})>0 &&!mDatabaseUser.getRegister(usernamesignin).equals(passworssignin))  {
                     etUsernameSignin.setText("");
                     etPasswordSignin.setText("");
                     Toast.makeText(ActivityLogin.this, R.string.pass_incorrect, Toast.LENGTH_SHORT).show();

@@ -22,15 +22,19 @@ import android.widget.Toast;
 
 import com.training.cst.quanlytienantrua.DataManager.Adapter.FragmentPayAdapter;
 import com.training.cst.quanlytienantrua.DataManager.Adapter.ItemClickListener;
+import com.training.cst.quanlytienantrua.DataManager.Object.History;
 import com.training.cst.quanlytienantrua.DataManager.Object.Person;
 import com.training.cst.quanlytienantrua.Database.DatabaseUser;
 import com.training.cst.quanlytienantrua.Helper.Contants;
 import com.training.cst.quanlytienantrua.R;
 
 import java.text.NumberFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 public class FragmentPay extends Fragment {
     private DatabaseUser mDatabaseUser;                      // Co so du lieu.
@@ -151,7 +155,7 @@ public class FragmentPay extends Fragment {
         dialog.findViewById(R.id.btnOk).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (!etTotalMoney.getText().toString().equals("")){
+                if (!etTotalMoney.getText().toString().equals("") && mListPerson.size()>0){
                     for (int i = 0; i < mListPosition.size(); i++) {
                         Person person = new Person(mListPerson.get(mListPosition.get(i)).getNamePerson(),
                                 mListPerson.get(mListPosition.get(i)).getDepartment(),
@@ -161,10 +165,16 @@ public class FragmentPay extends Fragment {
                                         (etTotalMoney.getText().toString())) / mListPosition.size(),
                                 mListPerson.get(mListPosition.get(i)).getParche(),
                                 mListPerson.get(mListPosition.get(i)).getmAmount()-Long.parseLong(Contants.replaceSymbol
-                                        (etTotalMoney.getText().toString())) / mListPosition.size());
+                                        (etTotalMoney.getText().toString())) / mListPosition.size(),
+                                mListPerson.get(mListPosition.get(i)).getmSumPay()+Long.parseLong(Contants.replaceSymbol
+                                        (etTotalMoney.getText().toString())) / mListPosition.size(),
+                                getDateTime()
+                                );
 
                         mDatabaseUser.updatePerson(person, mDatabaseUser.COLUMN_NAMEPERSON + " = ?",
                                 new String[]{mListPerson.get(mListPosition.get(i)).getNamePerson()});
+                        mDatabaseUser.insertHistory(new History(person.getNamePerson(),person.getPay(),
+                                person.getmAmount(),getDateTime()));
                         mFragmentPayAdapter.loadNewList(mDatabaseUser.getPerson());
                     }
                     initPosition();
@@ -178,7 +188,13 @@ public class FragmentPay extends Fragment {
         });
         dialog.show();
     }
-
+    // get datetime
+    private String getDateTime() {
+        SimpleDateFormat dateFormat = new SimpleDateFormat(
+                "yyyy-MM-dd", Locale.getDefault());
+        Date date = new Date();
+        return dateFormat.format(date);
+    }
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         menu.clear();

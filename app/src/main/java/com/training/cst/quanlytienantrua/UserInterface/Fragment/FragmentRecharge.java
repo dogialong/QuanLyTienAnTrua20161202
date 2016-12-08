@@ -22,15 +22,19 @@ import android.widget.Toast;
 
 import com.training.cst.quanlytienantrua.DataManager.Adapter.FragmentRechargeAdapter;
 import com.training.cst.quanlytienantrua.DataManager.Adapter.ItemClickListener;
+import com.training.cst.quanlytienantrua.DataManager.Object.History;
 import com.training.cst.quanlytienantrua.DataManager.Object.Person;
 import com.training.cst.quanlytienantrua.Database.DatabaseUser;
 import com.training.cst.quanlytienantrua.Helper.Contants;
 import com.training.cst.quanlytienantrua.R;
 
 import java.text.NumberFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 public class FragmentRecharge extends Fragment {
     private FragmentRechargeAdapter mFragmentRechareAdapter;    // Adapter cho listview
@@ -180,6 +184,8 @@ public class FragmentRecharge extends Fragment {
                         );
                         mDatabaseUser.updatePerson(person, mDatabaseUser.COLUMN_NAMEPERSON + " = ?",
                                 new String[]{mListPerson.get(mListPosition.get(i)).getNamePerson()});
+                        mDatabaseUser.insertHistory(new History(person.getNamePerson(),person.getPay(),
+                                person.getmAmount(),getDateTime()));
                         mFragmentRechareAdapter.loadNewList(mDatabaseUser.getPerson());
                         tvTotalMoney.setText(Contants.formatCurrencyForTextView(String.valueOf
                                 (Long.parseLong(Contants.replaceSymbol
@@ -210,5 +216,11 @@ public class FragmentRecharge extends Fragment {
             showDialog();
         }
         return super.onOptionsItemSelected(item);
+    }
+    private String getDateTime() {
+        SimpleDateFormat dateFormat = new SimpleDateFormat(
+                "yyyy-MM-dd", Locale.getDefault());
+        Date date = new Date();
+        return dateFormat.format(date);
     }
 }

@@ -150,9 +150,10 @@ public class FragmentFood extends Fragment {
                     long priceFood = Long.parseLong(Contants.replaceSymbol(etPriceFood.getText().toString()));
                     mDatabaseUser.insertFood(new Food(nameFood, priceFood));
                     mFragmentFoodAdapter.setmListFood(mDatabaseUser.getFood());
+                    resetText();
                     Toast.makeText(getContext(), R.string.add_food_success, Toast.LENGTH_SHORT).show();
-                }
-                else {
+                } else {
+                    resetText();
                     Toast.makeText(getContext(), R.string.missing_info, Toast.LENGTH_SHORT).show();
                 }
                 dialog.dismiss();
@@ -191,6 +192,11 @@ public class FragmentFood extends Fragment {
             }
         });
         dialog.show();
+    }
+    // reset text
+    private void resetText(){
+        etPriceFood.setText("");
+        etNameFood.setText("");
     }
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {

@@ -4,7 +4,9 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 
-import com.training.cst.quanlytienantrua.UserInterface.Fragment.FragmentFood;
+import com.training.cst.quanlytienantrua.UserInterface.Fragment.FragmentHistoryItem;
+
+import java.util.List;
 
 /**
  * Created by longdg on 06/12/2016.
@@ -12,15 +14,16 @@ import com.training.cst.quanlytienantrua.UserInterface.Fragment.FragmentFood;
 
 public class ViewPagerAdapter extends FragmentStatePagerAdapter {
     int mNumOfTabs;
-
-    public ViewPagerAdapter(FragmentManager fm,int mNumOfTabs) {
+    List<String> listNgay;
+    public ViewPagerAdapter(FragmentManager fm,int mNumOfTabs,List<String> listNgay) {
         super(fm);
         this.mNumOfTabs = mNumOfTabs;
+        this.listNgay = listNgay;
     }
 
     @Override
     public Fragment getItem(int position) {
-        Fragment fragment = new FragmentFood();
+        Fragment fragment = new FragmentHistoryItem(listNgay.get(position));
         return fragment;
     }
 
@@ -31,6 +34,6 @@ public class ViewPagerAdapter extends FragmentStatePagerAdapter {
     //Get Title
     @Override
     public CharSequence getPageTitle(int position) {
-        return "a";
+        return listNgay.get(position);
     }
 }

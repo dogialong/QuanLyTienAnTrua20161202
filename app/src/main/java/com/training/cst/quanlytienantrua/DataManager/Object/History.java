@@ -11,10 +11,9 @@ public class History {
     private long mAmount;
     private String mDate;
 
-    public History(String namePerson, long mPay, long mRecharge, long mAmount, String mDate) {
+    public History(String namePerson, long mPay, long mAmount, String mDate) {
         this.namePerson = namePerson;
         this.mPay = mPay;
-        this.mRecharge = mRecharge;
         this.mAmount = mAmount;
         this.mDate = mDate;
     }

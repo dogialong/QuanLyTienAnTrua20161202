@@ -15,7 +15,6 @@ import com.training.cst.quanlytienantrua.Database.DatabaseUser;
 import com.training.cst.quanlytienantrua.Helper.Contants;
 import com.training.cst.quanlytienantrua.R;
 
-import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -45,7 +44,6 @@ public class FragmentOverview extends Fragment {
             tvTotalMoney.setText("0.0");
         }
         setUpRecycleView(mRecyclerView);
-        setHasOptionsMenu(true);
         return view;
     }
 

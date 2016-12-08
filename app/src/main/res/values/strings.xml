@@ -13,6 +13,7 @@
     <string name="nav_item_people">People</string>
     <string name="nav_item_food">Food</string>
     <string name="nav_item_warning">Warning</string>
+    <string name="nav_item_history">History</string>
     <string name="nav_item_logout">Logout</string>
     <string name="error_create_person">Incorrect account. Please try again</string>
     <string name="missing_info">Missing information</string>
@@ -40,7 +41,8 @@
         <item>@string/nav_item_people</item>
         <item>@string/nav_item_food</item>
         <item>@string/nav_item_warning</item>
-        <item>@string/nav_item_logout</item>
+        <item>@string/nav_item_history</item>
+        <!--<item>@string/nav_item_logout</item>-->
     </string-array>
 
     <string name="title_pay">Pay</string>
@@ -50,7 +52,9 @@
     <string name="title_people">People</string>
     <string name="title_food">Food</string>
     <string name="title_warning">Warning</string>
+    <string name="title_history">History</string>
     <string name="title_logout">Logout</string>
+
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
