@@ -7,6 +7,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -47,15 +48,22 @@ public class FragmentPay extends Fragment {
     private List<Integer> mListPosition;                    // chua danh sach nhan vien duoc chon
     private String currentText = "";                         // Dung de xu li khi ngdung nhap so tien
     private RadioGroup radioCkbGroup;
+    private TextView tvPayDemo;
+    private List<String> mListString;
+    private List<String> mListString2;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = (View) inflater.inflate(R.layout.fragment_pay, container, false);
         RecyclerView mRecyclerView = (RecyclerView) view.findViewById(R.id.fragment_pay_rv);
         mDatabaseUser = new DatabaseUser(getContext());
+        mListString = new ArrayList<>();
+        mListString2 = new ArrayList<>();
         mListPerson = mDatabaseUser.getPerson();
+        initStringList();
         tvSizePeople = (TextView) view.findViewById(R.id.fragment_pay_tv_total_person);
         etTotalMoney = (EditText) view.findViewById(R.id.fragment_pay_et_money);
+        tvPayDemo = (TextView) view.findViewById(R.id.tvTryPay);
         radioCkbGroup = (RadioGroup) view.findViewById(R.id.radioCheck);
         etTotalMoney.addTextChangedListener(new TextWatcher() {
             @Override
@@ -101,7 +109,7 @@ public class FragmentPay extends Fragment {
         initPosition(); // Khoi tao danh sach cac checkbox be checked
         addListenerOnButton();
         // Khai bao adapter
-        mFragmentPayAdapter = new FragmentPayAdapter(getContext(), mListPerson, new ItemClickListener() {
+        mFragmentPayAdapter = new FragmentPayAdapter(getContext(), mListPerson,mListString, new ItemClickListener() {
             @Override
             public void clickItemListtener(View view, int possition) {
                 CheckBox chkPay = (CheckBox) view.findViewById(R.id.fragment_pay_item_recycleview_ckb);
@@ -111,12 +119,37 @@ public class FragmentPay extends Fragment {
                         if (!mListPosition.contains(possition)) {
                             mListPosition.add(possition);
                             Collections.sort(mListPosition);
+                            Log.d("ahi", "onClick: " + mListPosition);
                         }
                     } else {
                         mListPosition.remove(mListPosition.indexOf(possition));
                     }
                 } catch (IndexOutOfBoundsException i) {
 
+                }
+            }
+        });
+        tvPayDemo.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                try {
+                    for (int i = 0; i < mListPosition.size(); i++) {
+                        mListString2.set(mListPosition.get(i),String.valueOf(Long.parseLong(Contants.replaceSymbol
+                                (etTotalMoney.getText().toString())) / mListPosition.size()));
+                    }
+                } catch (NumberFormatException n) {
+
+                }
+                Log.d("mliststring", "onClick: " + mListString);
+                mFragmentPayAdapter.loadNewListString(mListString2);
+                switch (radioCkbGroup.getCheckedRadioButtonId()) {
+                    case R.id.radioCheckAll:
+                        initPosition();
+                        break;
+                    case R.id.radioUnCheckAll:
+                        mListPosition.clear();
+                        break;
+                    default:break;
                 }
             }
         });
@@ -141,7 +174,15 @@ public class FragmentPay extends Fragment {
             mListPosition.add(i);
         }
     }
-
+    // Khoi tao list string
+    private void initStringList() {
+        mListString.clear();
+        mListString2.clear();
+        for (int i = 0; i < mListPerson.size(); i++) {
+            mListString.add("0");
+            mListString2.add("0");
+        }
+    }
     // show dialog
     private void showDialog() {
         final Dialog dialog = new Dialog(getContext());
@@ -160,31 +201,39 @@ public class FragmentPay extends Fragment {
         dialog.findViewById(R.id.btnOk).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (!etTotalMoney.getText().toString().equals("") && mListPerson.size()>0
-                        && mListPosition.size()>0){
-                    for (int i = 0; i < mListPosition.size(); i++) {
-                        Person person = new Person(mListPerson.get(mListPosition.get(i)).getNamePerson(),
-                                mListPerson.get(mListPosition.get(i)).getDepartment(),
-                                mListPerson.get(mListPosition.get(i)).getNote(),
-                                mListPerson.get(mListPosition.get(i)).getmPathAvatar(),
-                                Long.parseLong(Contants.replaceSymbol
-                                        (etTotalMoney.getText().toString())) / mListPosition.size(),
-                                mListPerson.get(mListPosition.get(i)).getParche(),
-                                mListPerson.get(mListPosition.get(i)).getmAmount()-Long.parseLong(Contants.replaceSymbol
-                                        (etTotalMoney.getText().toString())) / mListPosition.size(),
-                                mListPerson.get(mListPosition.get(i)).getmSumPay()+Long.parseLong(Contants.replaceSymbol
-                                        (etTotalMoney.getText().toString())) / mListPosition.size(),
-                                getDateTime()
+                if (!etTotalMoney.getText().toString().equals("") && mListPerson.size()>0){
+                    if(mListPosition.size() > 0){
+                        try {
+                            for (int i = 0; i < mListPosition.size(); i++) {
+                                Person person = new Person(mListPerson.get(mListPosition.get(i)).getNamePerson(),
+                                        mListPerson.get(mListPosition.get(i)).getDepartment(),
+                                        mListPerson.get(mListPosition.get(i)).getNote(),
+                                        mListPerson.get(mListPosition.get(i)).getmPathAvatar(),
+                                        Long.parseLong(Contants.replaceSymbol(mListString2.get(mListPosition.get(i)))),
+                                        mListPerson.get(mListPosition.get(i)).getParche(),
+                                        mListPerson.get(mListPosition.get(i)).getmAmount()-
+                                                Long.parseLong(Contants.replaceSymbol(mListString2.get(mListPosition.get(i)))),
+                                        mListPerson.get(mListPosition.get(i)).getmSumPay()+
+                                                Long.parseLong(Contants.replaceSymbol(mListString2.get(mListPosition.get(i)))),
+                                        getDateTime()
                                 );
 
-                        mDatabaseUser.updatePerson(person, mDatabaseUser.COLUMN_NAMEPERSON + " = ?",
-                                new String[]{mListPerson.get(mListPosition.get(i)).getNamePerson()});
-                        mDatabaseUser.insertHistory(new History(person.getNamePerson(),person.getPay(),
-                                person.getmAmount(),getDateTime()));
-                        mFragmentPayAdapter.loadNewList(mDatabaseUser.getPerson());
+                                mDatabaseUser.updatePerson(person, mDatabaseUser.COLUMN_NAMEPERSON + " = ?",
+                                        new String[]{mListPerson.get(mListPosition.get(i)).getNamePerson()});
+                                mDatabaseUser.insertHistory(new History(person.getNamePerson(),person.getPay(),
+                                        person.getmAmount(),getDateTime()));
+                                mFragmentPayAdapter.loadNewList(mDatabaseUser.getPerson());
+                            }
+                        } catch (NumberFormatException n){
+
+                        }
+                        dialog.dismiss();
+                        Toast.makeText(getContext(), R.string.pay_success, Toast.LENGTH_SHORT).show();
+                    } else {
+                        dialog.dismiss();
+                        Log.d("lol", "onClick: " + "ahihihi");
+                        Toast.makeText(getContext(), "Please select people you want pay or choose Check all", Toast.LENGTH_SHORT).show();
                     }
-                    dialog.dismiss();
-                    Toast.makeText(getContext(), R.string.pay_success, Toast.LENGTH_SHORT).show();
                 } else {
                     dialog.dismiss();
                     Toast.makeText(getContext(), R.string.pay_error, Toast.LENGTH_SHORT).show();
@@ -210,6 +259,7 @@ public class FragmentPay extends Fragment {
             public void onClick(View v) {
                 mFragmentPayAdapter.checkboxSelected(false);
                 mListPosition.clear();
+                Log.d("ahi", "onClick: "  + mListPosition);
             }
         });
     }

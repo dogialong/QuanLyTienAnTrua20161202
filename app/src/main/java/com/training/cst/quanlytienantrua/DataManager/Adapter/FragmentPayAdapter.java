@@ -4,6 +4,7 @@ import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -26,6 +27,7 @@ public class FragmentPayAdapter extends RecyclerView.Adapter<FragmentPayAdapter.
     private Context mContext;
     ItemClickListener itemClickListener;
     boolean checked = true;
+    private List<String> mListString;
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).
@@ -33,14 +35,22 @@ public class FragmentPayAdapter extends RecyclerView.Adapter<FragmentPayAdapter.
         return new ViewHolder(view);
     }
 
-    public FragmentPayAdapter(Context mContext, List<Person> mListPerson, ItemClickListener itemClickListener) {
+    public FragmentPayAdapter(Context mContext, List<Person> mListPerson,
+                              List<String> mListString,ItemClickListener itemClickListener) {
         this.mListPerson = mListPerson;
         this.mContext = mContext;
+        this.mListString = mListString;
         this.itemClickListener = itemClickListener;
     }
     public void loadNewList(List<Person> mListPerson){
         this.mListPerson.clear();;
         this.mListPerson.addAll(mListPerson);
+        notifyDataSetChanged();
+    }
+    public void loadNewListString(List<String> mListString){
+        this.mListString.clear();
+        this.mListString.addAll(mListString);
+        Log.d("ahi", "loadNewListString: " + this.mListString.size() + mListString.size());
         notifyDataSetChanged();
     }
     public void checkboxSelected(Boolean checked) {
@@ -50,7 +60,7 @@ public class FragmentPayAdapter extends RecyclerView.Adapter<FragmentPayAdapter.
     @Override
     public void onBindViewHolder(ViewHolder holder, final int position) {
         holder.tvNamePersonPay.setText(mListPerson.get(position).getNamePerson());
-        holder.tvMoneyPersonPay.setText(String.valueOf(mListPerson.get(position).getPay()));
+        holder.tvMoneyPersonPay.setText((mListString.get(position)));
         holder.chkPay.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
