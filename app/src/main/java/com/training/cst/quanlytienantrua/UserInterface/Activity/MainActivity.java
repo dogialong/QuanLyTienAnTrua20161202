@@ -91,11 +91,11 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
                 fragment = new FragmentOverview();
                 title = getString(R.string.title_overview);
                 break;
-            case 1:
+            case 4:
                 fragment = new FragmentPay();
                 title = getString(R.string.title_pay);
                 break;
-            case 2:
+            case 5:
                 fragment = new FragmentPayBasedOnFood();
                 title = getString(R.string.title_paybaseon);
                 break;
@@ -103,19 +103,19 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
                 fragment = new FragmentRecharge();
                 title = getString(R.string.title_recharge);
                 break;
-            case 4:
+            case 1:
                 fragment = new FragmentPeople();
                 title = getString(R.string.title_people);
                 break;
-            case 5:
+            case 2:
                 fragment = new FragmentFood();
                 title= getString(R.string.title_food);
                 break;
-            case 6:
+            case 7:
                 fragment = new FragmentWarning();
                 title = getString(R.string.title_warning);
                 break;
-            case 7:
+            case 6:
                 fragment = new FragmentHistory();
                 title = getString(R.string.title_history);
                 break;

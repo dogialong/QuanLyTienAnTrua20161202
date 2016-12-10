@@ -14,6 +14,8 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.Spinner;
 import android.widget.Toast;
 
@@ -49,6 +51,8 @@ public class FragmentPayBasedOnFood extends Fragment {
     String mString;
     long moneyPay;                             // so tien can phai thanh toan
     String [] arrString;
+    Spinner spinner;
+    private RadioGroup radioCkbGroup;
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
@@ -62,6 +66,15 @@ public class FragmentPayBasedOnFood extends Fragment {
         mListPerson = mDatabaseUser.getPerson();
 //        initPosition();
         initStringList();
+        spinner = (Spinner) myView.findViewById(R.id.myspinner);
+        spinner.setAdapter(mSpinnerAdapter);
+        spinner.setDropDownVerticalOffset(50);
+        spinner.setDropDownHorizontalOffset(40);
+        spinner.setSelection(mSpinnerAdapter.getCount());
+        if(mListPositionCkb.size() == 0) {
+            spinner.setVisibility(View.INVISIBLE);
+        }
+        radioCkbGroup = (RadioGroup) myView.findViewById(R.id.radioCheck);
         mFragmentPayFoodAdapter = new FragmentPayFoodAdapter(getContext(), mListPerson, mListString,
                 new ItemClickListener() {
 
@@ -73,20 +86,23 @@ public class FragmentPayBasedOnFood extends Fragment {
                                 if (!mListPositionCkb.contains(possition)) {
                                     mListPositionCkb.add(possition);
                                     Collections.sort(mListPositionCkb);
+                                    if(mListPositionCkb.size()>0){
+                                        spinner.setVisibility(View.VISIBLE);
+                                    }
+                                    mListPosition.clear();
                                 }
                             } else {
                                 mListPositionCkb.remove(mListPositionCkb.indexOf(possition));
+                                if(mListPositionCkb.size()==0) {
+                                    spinner.setVisibility(View.INVISIBLE);
+                                }
+                                mListPosition.clear();
                             }
                         } catch (IndexOutOfBoundsException i) {
                             Toast.makeText(getContext(), "err", Toast.LENGTH_SHORT).show();
                         }
                     }
                 });
-        Spinner spinner = (Spinner) myView.findViewById(R.id.myspinner);
-        spinner.setAdapter(mSpinnerAdapter);
-        spinner.setDropDownVerticalOffset(50);
-        spinner.setDropDownHorizontalOffset(40);
-        spinner.setSelection(mSpinnerAdapter.getCount());
         Button btnPay = (Button) myView.findViewById(R.id.fragment_pay_food_btnpay);
         btnPay.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -107,36 +123,63 @@ public class FragmentPayBasedOnFood extends Fragment {
             @Override
             public void clickItemListtener(View view, int possition) {
                 CheckBox chkFood = (CheckBox) view.findViewById(R.id.ckbfood);
-                try {
-                    if (chkFood.isChecked()) {
-                        if (!mListPosition.contains(possition)) {
-                            mListPosition.add(possition);
-                            Collections.sort(mListPosition);
-                        }
-                    } else {
-                        mListPosition.remove(mListPosition.indexOf(possition));
-                    }
-                    StringBuilder stringBuilder = new StringBuilder();
-                    if (mListPosition.size() > 0) {
-                        for (int i = 0; i < mListPosition.size(); i++) {
-                            stringBuilder.append(mListFood.get(mListPosition.get(i)).getNameFood());
-                            if(i < mListPosition.size()-1) {
-                                stringBuilder.append(",");
+                    try {
+                        if (chkFood.isChecked()) {
+                            if (!mListPosition.contains(possition)) {
+                                mListPosition.add(possition);
+                                Collections.sort(mListPosition);
                             }
+                        } else {
+                            mListPosition.remove(mListPosition.indexOf(possition));
                         }
-                        mString = stringBuilder.toString();
-                    }  else {
-                        mString = "";
+                        StringBuilder stringBuilder = new StringBuilder();
+                        if (mListPosition.size() > 0) {
+                            for (int i = 0; i < mListPosition.size(); i++) {
+                                stringBuilder.append(mListFood.get(mListPosition.get(i)).getNameFood());
+                                if(i < mListPosition.size()-1) {
+                                    stringBuilder.append(",");
+                                }
+                            }
+                            mString = stringBuilder.toString();
+                        }  else {
+                            mString = "";
+                        }
+
+                    } catch (IndexOutOfBoundsException i) {
+
                     }
+                    for (int i = 0; i < mListPositionCkb.size(); i++) {
+                        mListString.set(mListPositionCkb.get(i),mString);
+                    }
+                    moneyPay = 0;                                   // reset lai so tien
+                    mFragmentPayFoodAdapter.notifyDataSetChanged();
 
-                } catch (IndexOutOfBoundsException i) {
-
-                }
-                for (int i = 0; i < mListPositionCkb.size(); i++) {
-                    mListString.set(mListPositionCkb.get(i),mString);
-                }
-                moneyPay = 0;                                   // reset lai so tien
-                mFragmentPayFoodAdapter.notifyDataSetChanged();
+            }
+        });
+    }
+    // init list checkbox
+    private void initmListPostionCkb() {
+        mListPositionCkb.clear();
+        for (int i = 0; i < mListPerson.size(); i++) {
+            mListPositionCkb.add(i);
+        }
+    }
+    // xu li su kien checkbox check hay khong
+    public void addListenerOnButton() {
+        RadioButton rdbCheckAll = (RadioButton) radioCkbGroup.findViewById(R.id.radioCheckAll);
+        rdbCheckAll.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mFragmentPayFoodAdapter.loadCheckbox(true);
+                initmListPostionCkb();
+            }
+        });
+        RadioButton rdbUnCheckall = (RadioButton) radioCkbGroup.findViewById(R.id.radioUnCheckAll);
+        rdbUnCheckall.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mFragmentPayFoodAdapter.loadCheckbox(false);
+                mListPositionCkb.clear();
             }
         });
     }

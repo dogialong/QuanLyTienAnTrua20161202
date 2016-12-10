@@ -13,7 +13,7 @@
         >
         <CheckBox
             android:id="@+id/fragment_pay_item_recycleview_ckb"
-            android:layout_width="48dp"
+            android:layout_width="42dp"
             android:layout_height="42dp"
             />
         <TextView
@@ -21,14 +21,22 @@
             android:layout_width="160dp"
             android:layout_height="wrap_content"
             android:textSize="@dimen/text_size_normal"
+            android:ellipsize="middle"
+            android:paddingRight="5dp"
+            android:singleLine="true"
             android:textColor="@color/colorPrimary"
             />
     </LinearLayout>
-    <TextView
+    <EditText
         android:id="@+id/fragment_pay_item_rv_money"
-
+        android:ellipsize="middle"
+        android:singleLine="true"
         android:gravity="center"
         android:textSize="@dimen/text_size_normal"
+        android:clickable="false"
+        android:cursorVisible="false"
+        android:focusable="false"
+        android:focusableInTouchMode="false"
         android:textColor="@color/colorPrimary"
         android:padding="@dimen/padding_text"
         android:background="@drawable/border_textview"

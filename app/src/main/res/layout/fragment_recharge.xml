@@ -94,9 +94,9 @@
 
             <TextView
                 android:id="@+id/fragment_recharge_tv_total"
-                android:layout_width="match_parent"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
+                android:layout_weight="1.3"
                 android:padding="@dimen/padding_text"
                 android:textSize="@dimen/text_size_big"
                 android:textColor="@color/colorPrimary"
@@ -107,9 +107,9 @@
 
             <TextView
                 android:id="@+id/fragment_recharge_tv_total_money"
-                android:layout_weight="1"
+                android:layout_weight="0.7"
                 android:padding="@dimen/padding_text"
-                android:layout_width="match_parent"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:textSize="@dimen/text_size_big"
                 android:textColor="@color/colorPrimary"

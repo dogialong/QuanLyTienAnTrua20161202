@@ -17,6 +17,8 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -44,6 +46,7 @@ public class FragmentPay extends Fragment {
     private FragmentPayAdapter mFragmentPayAdapter;          // Khai bao adpater.
     private List<Integer> mListPosition;                    // chua danh sach nhan vien duoc chon
     private String currentText = "";                         // Dung de xu li khi ngdung nhap so tien
+    private RadioGroup radioCkbGroup;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -53,6 +56,7 @@ public class FragmentPay extends Fragment {
         mListPerson = mDatabaseUser.getPerson();
         tvSizePeople = (TextView) view.findViewById(R.id.fragment_pay_tv_total_person);
         etTotalMoney = (EditText) view.findViewById(R.id.fragment_pay_et_money);
+        radioCkbGroup = (RadioGroup) view.findViewById(R.id.radioCheck);
         etTotalMoney.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -95,6 +99,7 @@ public class FragmentPay extends Fragment {
         });
         tvSizePeople.setText(String.valueOf(mListPerson.size()));     // Hien thi ra tong so nguoi
         initPosition(); // Khoi tao danh sach cac checkbox be checked
+        addListenerOnButton();
         // Khai bao adapter
         mFragmentPayAdapter = new FragmentPayAdapter(getContext(), mListPerson, new ItemClickListener() {
             @Override
@@ -109,7 +114,6 @@ public class FragmentPay extends Fragment {
                         }
                     } else {
                         mListPosition.remove(mListPosition.indexOf(possition));
-                        Toast.makeText(getContext(), mListPosition + "", Toast.LENGTH_SHORT).show();
                     }
                 } catch (IndexOutOfBoundsException i) {
 
@@ -149,13 +153,15 @@ public class FragmentPay extends Fragment {
         dialog.findViewById(R.id.btnCancel).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                mFragmentPayAdapter.checkboxSelected(false);
                 dialog.dismiss();
             }
         });
         dialog.findViewById(R.id.btnOk).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (!etTotalMoney.getText().toString().equals("") && mListPerson.size()>0){
+                if (!etTotalMoney.getText().toString().equals("") && mListPerson.size()>0
+                        && mListPosition.size()>0){
                     for (int i = 0; i < mListPosition.size(); i++) {
                         Person person = new Person(mListPerson.get(mListPosition.get(i)).getNamePerson(),
                                 mListPerson.get(mListPosition.get(i)).getDepartment(),
@@ -177,7 +183,6 @@ public class FragmentPay extends Fragment {
                                 person.getmAmount(),getDateTime()));
                         mFragmentPayAdapter.loadNewList(mDatabaseUser.getPerson());
                     }
-                    initPosition();
                     dialog.dismiss();
                     Toast.makeText(getContext(), R.string.pay_success, Toast.LENGTH_SHORT).show();
                 } else {
@@ -188,6 +193,27 @@ public class FragmentPay extends Fragment {
         });
         dialog.show();
     }
+
+    // xu li su kien checkbox check hay khong
+    public void addListenerOnButton() {
+        RadioButton rdbCheckAll = (RadioButton) radioCkbGroup.findViewById(R.id.radioCheckAll);
+        rdbCheckAll.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mFragmentPayAdapter.checkboxSelected(true);
+                initPosition();
+            }
+        });
+        RadioButton rdbUnCheckall = (RadioButton) radioCkbGroup.findViewById(R.id.radioUnCheckAll);
+        rdbUnCheckall.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mFragmentPayAdapter.checkboxSelected(false);
+                mListPosition.clear();
+            }
+        });
+    }
+
     // get datetime
     private String getDateTime() {
         SimpleDateFormat dateFormat = new SimpleDateFormat(

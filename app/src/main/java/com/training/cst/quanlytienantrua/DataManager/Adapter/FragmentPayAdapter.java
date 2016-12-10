@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
+import android.widget.EditText;
 import android.widget.TextView;
 
 import com.training.cst.quanlytienantrua.DataManager.Object.Person;
@@ -24,6 +25,7 @@ public class FragmentPayAdapter extends RecyclerView.Adapter<FragmentPayAdapter.
     private List<Person> mListPerson;
     private Context mContext;
     ItemClickListener itemClickListener;
+    boolean checked = true;
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).
@@ -41,6 +43,10 @@ public class FragmentPayAdapter extends RecyclerView.Adapter<FragmentPayAdapter.
         this.mListPerson.addAll(mListPerson);
         notifyDataSetChanged();
     }
+    public void checkboxSelected(Boolean checked) {
+        this.checked = checked;
+        notifyDataSetChanged();
+    }
     @Override
     public void onBindViewHolder(ViewHolder holder, final int position) {
         holder.tvNamePersonPay.setText(mListPerson.get(position).getNamePerson());
@@ -51,7 +57,7 @@ public class FragmentPayAdapter extends RecyclerView.Adapter<FragmentPayAdapter.
                 itemClickListener.clickItemListtener(v,position);
             }
         });
-        holder.chkPay.setChecked(true);
+        holder.chkPay.setChecked(checked);
     }
 
 
@@ -63,14 +69,14 @@ public class FragmentPayAdapter extends RecyclerView.Adapter<FragmentPayAdapter.
     public static class ViewHolder extends RecyclerView.ViewHolder {
         public final CheckBox chkPay;
         public final TextView tvNamePersonPay;
-        public final TextView tvMoneyPersonPay;
+        public final EditText tvMoneyPersonPay;
         private String current = "";
         private long money=0 ;
         public ViewHolder(View itemView) {
             super(itemView);
             chkPay = (CheckBox) itemView.findViewById(R.id.fragment_pay_item_recycleview_ckb);
             tvNamePersonPay = (TextView) itemView.findViewById(R.id.fragment_pay_item_recycleview_tv_nameperson);
-            tvMoneyPersonPay = (TextView)itemView.findViewById(R.id.fragment_pay_item_rv_money);
+            tvMoneyPersonPay = (EditText)itemView.findViewById(R.id.fragment_pay_item_rv_money);
             tvMoneyPersonPay.addTextChangedListener(new TextWatcher() {
                 @Override
                 public void beforeTextChanged(CharSequence s, int start, int count, int after) {

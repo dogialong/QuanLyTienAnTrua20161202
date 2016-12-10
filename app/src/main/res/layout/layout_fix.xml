@@ -34,14 +34,16 @@
                 android:textColor="@color/colorPrimary"
                 />
         </LinearLayout>
-        <TextView
+        <EditText
             android:id="@+id/fragment_pay_food_item_rv_namefood"
+
             android:gravity="center"
             android:textSize="@dimen/text_size_normal"
             android:textColor="@color/colorPrimary"
             android:padding="@dimen/padding_text"
             android:singleLine="true"
             android:ellipsize="end"
+
             android:background="@drawable/border_textview"
             android:layout_width="0dp"
             android:layout_weight="1.5"

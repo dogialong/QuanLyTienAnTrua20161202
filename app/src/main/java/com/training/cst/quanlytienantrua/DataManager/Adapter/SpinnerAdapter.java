@@ -21,12 +21,16 @@ public class SpinnerAdapter extends BaseAdapter {
     Context context;
     List<Food> listFood;
     ItemClickListener itemClickListener;
+    boolean checked = false;
     public SpinnerAdapter(Context context, List<Food> listFood,ItemClickListener itemClickListener) {
         this.context = context;
         this.listFood = listFood;
         this.itemClickListener = itemClickListener;
     }
-
+    public void loadCheck(boolean checked){
+        this.checked = checked;
+        notifyDataSetChanged();
+    }
     @Override
     public int getCount() {
         int count = listFood.size();
@@ -51,6 +55,7 @@ public class SpinnerAdapter extends BaseAdapter {
         }
         Food food = listFood.get(position);
         CheckBox ckbFood = (CheckBox) convertView.findViewById(R.id.ckbfood);
+        ckbFood.setChecked(checked);
         if(position == listFood.size()-1){
             ckbFood.setVisibility(View.GONE);
         }

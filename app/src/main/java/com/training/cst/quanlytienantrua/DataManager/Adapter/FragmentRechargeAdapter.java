@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
+import android.widget.EditText;
 import android.widget.TextView;
 
 import com.training.cst.quanlytienantrua.DataManager.Object.Person;
@@ -63,14 +64,14 @@ public class FragmentRechargeAdapter extends RecyclerView.Adapter<FragmentRechar
     public static class ViewHolder extends RecyclerView.ViewHolder {
         public final CheckBox chkRecharge;
         public final TextView tvNamePersonRecharge;
-        public final TextView tvMoneyPersonRechare;
+        public final EditText tvMoneyPersonRechare;
         private String current = "";
         private long money=0 ;
         public ViewHolder(View itemView) {
             super(itemView);
             chkRecharge = (CheckBox) itemView.findViewById(R.id.fragment_pay_item_recycleview_ckb);
             tvNamePersonRecharge = (TextView) itemView.findViewById(R.id.fragment_pay_item_recycleview_tv_nameperson);
-            tvMoneyPersonRechare = (TextView)itemView.findViewById(R.id.fragment_pay_item_rv_money);
+            tvMoneyPersonRechare = (EditText)itemView.findViewById(R.id.fragment_pay_item_rv_money);
             tvMoneyPersonRechare.addTextChangedListener(new TextWatcher() {
                 @Override
                 public void beforeTextChanged(CharSequence s, int start, int count, int after) {

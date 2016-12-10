@@ -234,7 +234,7 @@ public class FragmentPersonAdd extends Fragment {
                     List<Person> listPer = new ArrayList<>();
                     Toast.makeText(getContext(), R.string.add_person_success, Toast.LENGTH_SHORT).show();
                     listPer = mDatabaseUser.getPerson();
-                    ((MainActivity) getActivity()).displayView(4);
+                    ((MainActivity) getActivity()).displayView(1);
                 }
                 else {
                     Toast.makeText(getContext(), R.string.error_create_person, Toast.LENGTH_SHORT).show();

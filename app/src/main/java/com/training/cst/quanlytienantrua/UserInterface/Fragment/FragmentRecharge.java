@@ -176,7 +176,7 @@ public class FragmentRecharge extends Fragment {
                                 mListPerson.get(mListPosition.get(i)).getDepartment(),
                                 mListPerson.get(mListPosition.get(i)).getNote(),
                                 mListPerson.get(mListPosition.get(i)).getmPathAvatar(),
-                                mListPerson.get(mListPosition.get(i)).getPay(),
+                                0,
                                 Long.parseLong(Contants.replaceSymbol(etAmount.getText().toString())),
                                 mListPerson.get(mListPosition.get(i)).getmAmount()+ Long.parseLong(
                                                 Contants.replaceSymbol(etAmount.getText().toString()))

@@ -2,7 +2,6 @@ package com.training.cst.quanlytienantrua.DataManager.Adapter;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,6 +23,7 @@ public class FragmentPayFoodAdapter extends RecyclerView.Adapter<FragmentPayFood
     private List<String> mListString;
     private List<Person> mListPerson;
     private ItemClickListener itemClickListener;
+    private boolean checked = false;
     public FragmentPayFoodAdapter(Context mContext, List<Person> mListPerson,List<String> mListString,
                                   ItemClickListener itemClickListener) {
         this.mContext = mContext;
@@ -31,9 +31,8 @@ public class FragmentPayFoodAdapter extends RecyclerView.Adapter<FragmentPayFood
         this.mListString = mListString;
         this.itemClickListener = itemClickListener;
     }
-    public void loadNewString(List<String> mString){
-        this.mListString.clear();
-        this.mListString.addAll(mString);
+    public void loadCheckbox(boolean checked){
+        this.checked = checked;
         notifyDataSetChanged();
     }
     @Override
@@ -50,7 +49,6 @@ public class FragmentPayFoodAdapter extends RecyclerView.Adapter<FragmentPayFood
             @Override
             public void onClick(View v) {
                 itemClickListener.clickItemListtener(v,position);
-                Log.d("TAG---","abc"+position);
             }
         });
 

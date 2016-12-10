@@ -38,7 +38,7 @@ public class FragmentHistoryItemAdapter extends RecyclerView.Adapter<FragmentHis
         holder.tvSumAmount.setText("Money left : " + String.valueOf(mListHistory.get(position).
                 getmAmount()));
         holder.tvSumPay.setText("Money pay : " +String.valueOf(mListHistory.get(position).getmPay()));
-        holder.tvNamePerson.setText("Name person : " + mListHistory.get(position).getNamePerson());
+        holder.tvNamePerson.setText("Name person : " +mListHistory.get(position).getNamePerson());
     }
 
     @Override

@@ -6,6 +6,7 @@ import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -117,6 +118,8 @@ public class ActivityLogin extends AppCompatActivity {
             }
         });
         overridePendingTransition(R.anim.slide_in, R.anim.slide_out);
+        getWindow().setSoftInputMode(
+                WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
     }
     private void reset() {
         etPasswordSignup.setText("");

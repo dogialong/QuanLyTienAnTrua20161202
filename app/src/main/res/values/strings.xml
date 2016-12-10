@@ -35,13 +35,13 @@
     <!-- navigation drawer item labels  -->
     <string-array name="nav_drawer_labels">
         <item>@string/nav_item_overview</item>
-        <item>@string/nav_item_pay</item>
-        <item>@string/nav_item_pay_baseon</item>
-        <item>@string/nav_item_recharge</item>
         <item>@string/nav_item_people</item>
         <item>@string/nav_item_food</item>
-        <item>@string/nav_item_warning</item>
+        <item>@string/nav_item_recharge</item>
+        <item>@string/nav_item_pay</item>
+        <item>@string/nav_item_pay_baseon</item>
         <item>@string/nav_item_history</item>
+        <item>@string/nav_item_warning</item>
         <!--<item>@string/nav_item_logout</item>-->
     </string-array>
 
