@@ -40,7 +40,7 @@ public class FragmentOverviewAdapter extends RecyclerView.Adapter<FragmentOvervi
     public void onBindViewHolder(ViewHolder holder, int position) {
         holder.tvMoneyLeft.setText(String.valueOf(mListperson.get(position).
                 getmAmount()));
-        holder.tvNamePerson.setText(mListperson.get(position).getNamePerson());
+        holder.tvNamePerson.setText(Contants.handlerTextToLong(mListperson.get(position).getNamePerson()));
     }
 
     @Override

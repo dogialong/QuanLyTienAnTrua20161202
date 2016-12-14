@@ -25,6 +25,8 @@ public class FragmentRechargeAdapter extends RecyclerView.Adapter<FragmentRechar
     private List<Person> mListPerson;
     private Context mContext;
     ItemClickListener itemClickListener;
+    private List<String> mListString;
+    private List<Boolean> mListBoolean;
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).
@@ -32,10 +34,25 @@ public class FragmentRechargeAdapter extends RecyclerView.Adapter<FragmentRechar
         return new ViewHolder(view);
     }
 
-    public FragmentRechargeAdapter(Context mContext,List<Person> mListPerson,ItemClickListener itemClickListener) {
+    public FragmentRechargeAdapter(Context mContext,List<Person> mListPerson,List<String> mListString,
+                                   List<Boolean> mListBoolean,ItemClickListener itemClickListener) {
         this.mListPerson = mListPerson;
         this.mContext = mContext;
+        this.mListString = mListString;
+        this.mListBoolean = mListBoolean;
         this.itemClickListener = itemClickListener;
+    }
+    public void loadNewListString(List<String> mListString,List<Boolean> mListBoolean1){
+        this.mListBoolean.clear();
+        this.mListBoolean.addAll(mListBoolean1);
+        this.mListString.clear();
+        this.mListString.addAll(mListString);
+        notifyDataSetChanged();
+    }
+    public void loadNewBoolean(List<Boolean> mListBoolean1){
+        this.mListBoolean.clear();
+        this.mListBoolean.addAll(mListBoolean1);
+        notifyDataSetChanged();
     }
     public void loadNewList(List<Person> mListPerson){
         this.mListPerson.clear();;
@@ -44,15 +61,15 @@ public class FragmentRechargeAdapter extends RecyclerView.Adapter<FragmentRechar
     }
     @Override
     public void onBindViewHolder(ViewHolder holder, final int position) {
-        holder.tvNamePersonRecharge.setText(mListPerson.get(position).getNamePerson());
-        holder.tvMoneyPersonRechare.setText(String.valueOf(mListPerson.get(position).getParche()));
+        holder.tvNamePersonRecharge.setText(Contants.handlerTextToLong(mListPerson.get(position).getNamePerson()));;
+        holder.tvMoneyPersonRechare.setText(mListString.get(position));
         holder.chkRecharge.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 itemClickListener.clickItemListtener(v,position);
             }
         });
-        holder.chkRecharge.setChecked(true);
+        holder.chkRecharge.setChecked(this.mListBoolean.get(position));
     }
 
 

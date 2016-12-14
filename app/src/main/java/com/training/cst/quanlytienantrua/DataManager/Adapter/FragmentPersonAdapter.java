@@ -1,9 +1,11 @@
 package com.training.cst.quanlytienantrua.DataManager.Adapter;
 
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,10 +17,13 @@ import com.chauthai.swipereveallayout.SwipeRevealLayout;
 import com.chauthai.swipereveallayout.ViewBinderHelper;
 import com.training.cst.quanlytienantrua.DataManager.Object.Person;
 import com.training.cst.quanlytienantrua.Database.DatabaseUser;
+import com.training.cst.quanlytienantrua.Helper.Contants;
 import com.training.cst.quanlytienantrua.R;
 
 import java.io.File;
 import java.util.List;
+
+import static android.content.ContentValues.TAG;
 
 /**
  * Created by longdg123 on 11/23/2016.
@@ -50,13 +55,16 @@ public class FragmentPersonAdapter extends RecyclerView.Adapter<FragmentPersonAd
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
         final int positionFake = position;
-        holder.tvNamePerson.setText(mListPerson.get(position).getNamePerson());
+        holder.tvNamePerson.setText(Contants.handlerTextToLong(mListPerson.get(position).getNamePerson()));
         holder.ivAvatar.setImageResource(R.drawable.ic_user);
         binderHelper.bind(holder.swipeLayout,mListPerson.get(position).getNamePerson());
         try {
             if ((new File(mListPerson.get(position).getmPathAvatar())).exists()
                     && !mListPerson.get(position).getmPathAvatar().equals("")) {
-                holder.ivAvatar.setImageBitmap(BitmapFactory.decodeFile(mListPerson.get(position).getmPathAvatar()));
+                Bitmap bitmap = BitmapFactory.decodeFile(mListPerson.get(position).getmPathAvatar());
+                holder.ivAvatar.setImageBitmap(bitmap);
+                Log.d(TAG, "onBindViewHolder: " + mListPerson.get(position).getmPathAvatar());
+//                Picasso.with(mContext).load(mListPerson.get(position).getmPathAvatar()).into(holder.ivAvatar);
             }
         } catch (NullPointerException n) {
 

@@ -30,7 +30,7 @@ public class FragmentFoodAdapter extends RecyclerView.Adapter<FragmentFoodAdapte
     ItemClickListener itemClickListener;
     private final ViewBinderHelper binderHelper = new ViewBinderHelper();
     public FragmentFoodAdapter(DatabaseUser mDatabaseUser, Context mContext,
-                               List<Food> mListFood, ItemClickListener itemClickListener) {
+                               List<Food> mListFood,ItemClickListener itemClickListener) {
         this.mDatabaseUser = mDatabaseUser;
         this.mContext = mContext;
         this.mListFood = mListFood;
@@ -57,7 +57,7 @@ public class FragmentFoodAdapter extends RecyclerView.Adapter<FragmentFoodAdapte
     @Override
     public void onBindViewHolder(ViewHolder holder, final int position) {
         binderHelper.bind(holder.swipeLayout,mListFood.get(position).getNameFood());
-        holder.tvNameFood.setText(mListFood.get(position).getNameFood());
+        holder.tvNameFood.setText(Contants.handlerTextToLong(mListFood.get(position).getNameFood()));
         holder.tvPriceFood.setText(String.valueOf(mListFood.get(position).getPriceFood()));
         holder.btnDeleteFood.setOnClickListener(new View.OnClickListener() {
             @Override

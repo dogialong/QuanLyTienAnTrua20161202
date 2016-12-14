@@ -143,6 +143,7 @@ public class FragmentFood extends Fragment {
                 // save food.
                 String nameFood = etNameFood.getText().toString();
                 nameFood = Contants.formatInfoperson(nameFood);
+                nameFood = Contants.handlerTextToLong2(nameFood);
                 Matcher matcher = Contants.PATTERN.matcher(nameFood);
                 final int countFood = mDatabaseUser.checkFood(mDatabaseUser.COLUMN_NAMEFOOD + "= ?", new String[]{nameFood});
                 if (countFood < 1 && matcher.matches() && !nameFood.equals("")

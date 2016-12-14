@@ -71,12 +71,14 @@
                     android:layout_height="wrap_content"
                     android:text="Check all"
                     android:layout_marginRight="30dp"
+                    android:inputType="textNoSuggestions"
                     android:checked="true" />
 
                 <RadioButton
                     android:id="@+id/radioUnCheckAll"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:inputType="textNoSuggestions"
                     android:text="Uncheck all" />
 
             </RadioGroup>

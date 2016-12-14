@@ -1,9 +1,7 @@
 package com.training.cst.quanlytienantrua.Helper;
 
-import android.os.Build;
 import android.text.Editable;
 
-import java.math.BigDecimal;
 import java.text.DecimalFormatSymbols;
 import java.text.NumberFormat;
 import java.util.Currency;
@@ -15,7 +13,7 @@ import java.util.regex.Pattern;
  */
 
 public class Contants {
-    public final static String INPUT = "[ a-zA-Z0-9_ẮắẰằẲẳẴẵẶặĂẤấẦầẨẩẪẫẬậÂâÁáÀàÃãẢảẠạĐđẾếỀềỂểỄễỆ" +
+    public final static String INPUT = "[ a-zA-Z0-9_ẮắẰằẲẳẴẵẶặĂăẤấẦầẨẩẪẫẬậÂâÁáÀàÃãẢảẠạĐđẾếỀềỂểỄễỆABCDEKIJHLMOOPQ" +
             "ệÊêÉéÈèẺẻẼẽẸẹÍíÌìỈỉĨĩỊịỐốỒồỔổỖỗỘộÔôỚớỜờỞởỠỡỢợƠơÓóÒòÕõỎỏỌọỨứỪừỬửỮữỰựƯưÚúÙùỦủŨũỤụÝýỲỳỶỷỸỹỴỵ]+";
     public final static Pattern PATTERN = Pattern.compile(INPUT);
 
@@ -24,7 +22,49 @@ public class Contants {
         String cleanString = sFormat.toString().replaceAll(replaceable, "");
         return cleanString;
     }
+    public static String handlerTextToLong (String s) {
+        StringBuilder buider = new StringBuilder();;
+       try {
+           if(s.length() > 16) {
+              if(s.contains(" ")) {
+                  String [] arr = s.split(" ");
+                  buider.append(arr[0]);
+                  buider.append(" ");
+                  buider.append(arr[arr.length-2]);
+                  buider.append(" ");
+                  buider.append(arr[arr.length-1]);
+              } else {
+                  buider.append(s.substring(s.length()/2,s.length()-1));
+              }
 
+           } else {
+               return s;
+           }
+       } catch (ArrayIndexOutOfBoundsException a ) {
+
+       }
+        return buider.toString();
+
+    }
+    public static String handlerTextToLong2 (String s) {
+        StringBuilder buider = new StringBuilder();;
+        if(s.length() > 13) {
+            if(s.contains(" ")) {
+                String [] arr = s.split(" ");
+                buider.append(arr[0]);
+                buider.append(" ");
+                buider.append(arr[arr.length-2]);
+                buider.append(" ");
+                buider.append(arr[arr.length-1]);
+            } else {
+                buider.append(s.substring(s.length()/3,s.length()-1));
+            }
+        } else {
+            return s;
+        }
+        return buider.toString();
+
+    }
     public static String formatCurrency(Editable s, String current, double money) {
 
         Locale locale = new Locale("vi", "VN");

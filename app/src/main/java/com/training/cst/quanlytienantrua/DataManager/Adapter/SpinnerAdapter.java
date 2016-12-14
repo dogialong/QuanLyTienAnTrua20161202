@@ -9,6 +9,7 @@ import android.widget.CheckBox;
 import android.widget.TextView;
 
 import com.training.cst.quanlytienantrua.DataManager.Object.Food;
+import com.training.cst.quanlytienantrua.Helper.Contants;
 import com.training.cst.quanlytienantrua.R;
 
 import java.util.List;
@@ -66,7 +67,7 @@ public class SpinnerAdapter extends BaseAdapter {
             }
         });
         TextView tvNameFood = (TextView) convertView.findViewById(R.id.nameFood);
-        tvNameFood.setText(food.getNameFood());
+        tvNameFood.setText(Contants.handlerTextToLong2(food.getNameFood()));
         return convertView;
     }
 }

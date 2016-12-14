@@ -19,6 +19,7 @@
         android:layout_height="48dp"
         android:text="New Text"
         android:gravity="center"
+        android:inputType="textNoSuggestions"
         android:layout_gravity="left"
         android:layout_margin="4dp"
         android:id="@+id/nameFood" />

@@ -2,6 +2,7 @@ package com.training.cst.quanlytienantrua.DataManager.Adapter;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,6 +10,7 @@ import android.widget.CheckBox;
 import android.widget.TextView;
 
 import com.training.cst.quanlytienantrua.DataManager.Object.Person;
+import com.training.cst.quanlytienantrua.Helper.Contants;
 import com.training.cst.quanlytienantrua.R;
 
 import java.util.List;
@@ -23,16 +25,20 @@ public class FragmentPayFoodAdapter extends RecyclerView.Adapter<FragmentPayFood
     private List<String> mListString;
     private List<Person> mListPerson;
     private ItemClickListener itemClickListener;
-    private boolean checked = false;
+    private List<Boolean> listChecked ;
     public FragmentPayFoodAdapter(Context mContext, List<Person> mListPerson,List<String> mListString,
+                                  List<Boolean> listCheckeda,
                                   ItemClickListener itemClickListener) {
         this.mContext = mContext;
         this.mListPerson = mListPerson;
         this.mListString = mListString;
+        this.listChecked = listCheckeda;
         this.itemClickListener = itemClickListener;
     }
-    public void loadCheckbox(boolean checked){
-        this.checked = checked;
+    public void loadCheckbox(List<Boolean> checked){
+        this.listChecked.clear();
+        Log.d("ahhi", "loadCheckbox: "  + checked);
+        listChecked.addAll(checked);
         notifyDataSetChanged();
     }
     @Override
@@ -44,15 +50,14 @@ public class FragmentPayFoodAdapter extends RecyclerView.Adapter<FragmentPayFood
 
     @Override
     public void onBindViewHolder(ViewHolder holder, final int position) {
-        holder.tvNamePerson.setText(mListPerson.get(position).getNamePerson());
+        holder.tvNamePerson.setText(Contants.handlerTextToLong2(mListPerson.get(position).getNamePerson()));
         holder.chkFood.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 itemClickListener.clickItemListtener(v,position);
             }
         });
-
-//        holder.chkFood.setChecked(true);
+        holder.chkFood.setChecked(listChecked.get(position));
         holder.tvNameFoodSelected.setText(mListString.get(position));
     }
 

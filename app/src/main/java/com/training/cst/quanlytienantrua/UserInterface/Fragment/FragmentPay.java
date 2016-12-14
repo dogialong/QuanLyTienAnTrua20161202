@@ -51,6 +51,7 @@ public class FragmentPay extends Fragment {
     private TextView tvPayDemo;
     private List<String> mListString;
     private List<String> mListString2;
+    private List<Boolean> mListBoolean ;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -61,6 +62,7 @@ public class FragmentPay extends Fragment {
         mListString2 = new ArrayList<>();
         mListPerson = mDatabaseUser.getPerson();
         initStringList();
+        initBoolean(true);
         tvSizePeople = (TextView) view.findViewById(R.id.fragment_pay_tv_total_person);
         etTotalMoney = (EditText) view.findViewById(R.id.fragment_pay_et_money);
         tvPayDemo = (TextView) view.findViewById(R.id.tvTryPay);
@@ -97,7 +99,7 @@ public class FragmentPay extends Fragment {
 
                         currentText = formatted;
                         etTotalMoney.setText(formatted);
-                        etTotalMoney.setSelection(formatted.length());
+                        etTotalMoney.setSelection(formatted.length()-2);
                         etTotalMoney.addTextChangedListener(this);
                     }
                 } catch (NumberFormatException n) {
@@ -106,10 +108,11 @@ public class FragmentPay extends Fragment {
             }
         });
         tvSizePeople.setText(String.valueOf(mListPerson.size()));     // Hien thi ra tong so nguoi
-        initPosition(); // Khoi tao danh sach cac checkbox be checked
+        initPosition();                                 // Khoi tao danh sach cac checkbox be checked
         addListenerOnButton();
         // Khai bao adapter
-        mFragmentPayAdapter = new FragmentPayAdapter(getContext(), mListPerson,mListString, new ItemClickListener() {
+        mFragmentPayAdapter = new FragmentPayAdapter(getContext(), mListPerson,mListString,mListBoolean,
+                new ItemClickListener() {
             @Override
             public void clickItemListtener(View view, int possition) {
                 CheckBox chkPay = (CheckBox) view.findViewById(R.id.fragment_pay_item_recycleview_ckb);
@@ -118,10 +121,12 @@ public class FragmentPay extends Fragment {
                     if (chkPay.isChecked()) {
                         if (!mListPosition.contains(possition)) {
                             mListPosition.add(possition);
+                            mListBoolean.set(possition,true);
                             Collections.sort(mListPosition);
-                            Log.d("ahi", "onClick: " + mListPosition);
+                            Log.d("cc", "mFragmentPayAdapter: " + mListBoolean);
                         }
                     } else {
+                        mListBoolean.set(possition,false);
                         mListPosition.remove(mListPosition.indexOf(possition));
                     }
                 } catch (IndexOutOfBoundsException i) {
@@ -129,6 +134,7 @@ public class FragmentPay extends Fragment {
                 }
             }
         });
+        mFragmentPayAdapter.loadNewBoolean(initBoolean(true));
         tvPayDemo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -140,14 +146,17 @@ public class FragmentPay extends Fragment {
                 } catch (NumberFormatException n) {
 
                 }
-                Log.d("mliststring", "onClick: " + mListString);
-                mFragmentPayAdapter.loadNewListString(mListString2);
+                Log.d("ahi", "paydemo: " + mListBoolean);
+                mFragmentPayAdapter.loadNewListString(mListString2,mListBoolean);
                 switch (radioCkbGroup.getCheckedRadioButtonId()) {
                     case R.id.radioCheckAll:
-                        initPosition();
+                        Log.d("ahi", "onClickinradio: " + mListPosition);
+                        Log.d("ahi", "onClickinradio: " + mListBoolean);
                         break;
                     case R.id.radioUnCheckAll:
-                        mListPosition.clear();
+//                        mListPosition.clear();
+                        mFragmentPayAdapter.loadNewListString(mListString2,mListBoolean);
+                        Log.d("ahi", "onClickinradiouncheck: " + mListPosition);
                         break;
                     default:break;
                 }
@@ -194,14 +203,14 @@ public class FragmentPay extends Fragment {
         dialog.findViewById(R.id.btnCancel).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mFragmentPayAdapter.checkboxSelected(false);
+//                mFragmentPayAdapter.checkboxSelected(false);
                 dialog.dismiss();
             }
         });
         dialog.findViewById(R.id.btnOk).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (!etTotalMoney.getText().toString().equals("") && mListPerson.size()>0){
+                if (!etTotalMoney.getText().toString().equals("") && mListPerson.size()>0 && checkPay(mListString2)){
                     if(mListPosition.size() > 0){
                         try {
                             for (int i = 0; i < mListPosition.size(); i++) {
@@ -222,7 +231,8 @@ public class FragmentPay extends Fragment {
                                         new String[]{mListPerson.get(mListPosition.get(i)).getNamePerson()});
                                 mDatabaseUser.insertHistory(new History(person.getNamePerson(),person.getPay(),
                                         person.getmAmount(),getDateTime()));
-                                mFragmentPayAdapter.loadNewList(mDatabaseUser.getPerson());
+                                mFragmentPayAdapter.loadNewBoolean(mListBoolean);
+//                                Log.d("cc", "Save: " + mListBoolean);
                             }
                         } catch (NumberFormatException n){
 
@@ -231,7 +241,7 @@ public class FragmentPay extends Fragment {
                         Toast.makeText(getContext(), R.string.pay_success, Toast.LENGTH_SHORT).show();
                     } else {
                         dialog.dismiss();
-                        Log.d("lol", "onClick: " + "ahihihi");
+                        Log.d("ahi", "onClick3: " + "ahihihi");
                         Toast.makeText(getContext(), "Please select people you want pay or choose Check all", Toast.LENGTH_SHORT).show();
                     }
                 } else {
@@ -242,28 +252,52 @@ public class FragmentPay extends Fragment {
         });
         dialog.show();
     }
+    private boolean checkPay (List<String> mListring) {
+        boolean check = false;
+        int countCheck = 0;
+        for (int i = 0; i < mListPosition.size() ; i++) {
+            if(!mListring.get(mListPosition.get(i)).equals("0")){
+                countCheck ++;
+                if(countCheck == mListPosition.size()){
+                    check = true;
+                    break;
+                }
+            }
+        }
 
+        return check;
+    }
     // xu li su kien checkbox check hay khong
     public void addListenerOnButton() {
         RadioButton rdbCheckAll = (RadioButton) radioCkbGroup.findViewById(R.id.radioCheckAll);
         rdbCheckAll.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mFragmentPayAdapter.checkboxSelected(true);
+//                mFragmentPayAdapter.checkboxSelected(true);
+                mFragmentPayAdapter.loadNewBoolean(initBoolean(true));
                 initPosition();
+                Log.d("ahi", "onClick1: "  + mListPosition);
             }
         });
         RadioButton rdbUnCheckall = (RadioButton) radioCkbGroup.findViewById(R.id.radioUnCheckAll);
         rdbUnCheckall.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mFragmentPayAdapter.checkboxSelected(false);
+//                mFragmentPayAdapter.checkboxSelected(false);
+                mFragmentPayAdapter.loadNewBoolean(initBoolean(false));
                 mListPosition.clear();
-                Log.d("ahi", "onClick: "  + mListPosition);
+                Log.d("ahi", "onClick2: "  + mListPosition);
             }
         });
     }
-
+    // init list boolean
+    private List<Boolean> initBoolean (Boolean checked) {
+        mListBoolean = new ArrayList<>();
+        for(int i = 0 ; i < mListPerson.size();i++){
+            mListBoolean.add(checked);
+        }
+        return mListBoolean;
+    }
     // get datetime
     private String getDateTime() {
         SimpleDateFormat dateFormat = new SimpleDateFormat(

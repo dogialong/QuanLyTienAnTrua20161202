@@ -32,11 +32,12 @@ public class DatabaseUser extends SQLiteOpenHelper {
     public static final String COLUMN_USERNAME = "username";
     public static final String COLUMN_PASSWORD = "password";
     public static final String COLUMN_REPASSWORD = "repassword";
+    public static final String COLUMN_AVATAR = "avatarpath";
     private static final String CREATE_ACCOUNT_TABLE = "CREATE TABLE " + TABLE_ACCOUNT + " ( " +
             COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT," +
             COLUMN_USERNAME + " TEXT," + COLUMN_PASSWORD + " TEXT," +
-            COLUMN_REPASSWORD + " TEXT" +
-            ");";
+            COLUMN_REPASSWORD + " TEXT," +
+            COLUMN_AVATAR + "TEXT);";
     // Cac thong tin ve person
     public static final String TABLE_PERSON = "person";
     public static final String COLUMN_ID_PERSON = "_idper";
@@ -113,10 +114,22 @@ public class DatabaseUser extends SQLiteOpenHelper {
         values.put(COLUMN_USERNAME, account.getUserName());
         values.put(COLUMN_PASSWORD, account.getPassword());
         values.put(COLUMN_REPASSWORD, account.getRePassword());
+//        values.put(COLUMN_AVATAR,account.getmAvatar());
         rowId = db.insert(TABLE_ACCOUNT, null, values);
         return rowId;
     }
-
+    // update account
+    public int updateAccount(Account account, String where, String... whereArgs) {
+        int rowCount = 0;
+        SQLiteDatabase db = getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put(COLUMN_USERNAME, account.getUserName());
+        values.put(COLUMN_PASSWORD, account.getPassword());
+        values.put(COLUMN_REPASSWORD, account.getRePassword());
+        values.put(COLUMN_PATHAVATAR,account.getmAvatar());
+        rowCount = db.update(TABLE_PERSON, values, where, whereArgs);
+        return rowCount;
+    }
     // them person
     public long insertPerson(Person person) {
         long rowId = 0;

@@ -14,7 +14,7 @@
             android:orientation="horizontal"
             android:background="@drawable/border_textview"
             android:focusableInTouchMode="false"
-            android:layout_weight="1.5"
+            android:layout_weight="1.3"
             >
             <CheckBox
                 android:id="@+id/fragment_pay_food_item_recycleview_ckb"
@@ -25,7 +25,9 @@
             <TextView
                 android:id="@+id/fragment_pay_food_item_recycleview_tv_nameperson"
                 android:layout_width="0dp"
-                android:layout_weight="1.7"
+                android:layout_weight="1"
+                android:inputType="textNoSuggestions"
+                android:text="dadad"
                 android:layout_height="wrap_content"
                 android:textSize="@dimen/text_size_normal"
                 android:ellipsize="end"
@@ -40,11 +42,12 @@
             android:textSize="@dimen/text_size_normal"
             android:textColor="@color/colorPrimary"
             android:padding="@dimen/padding_text"
+            android:inputType="textNoSuggestions"
             android:singleLine="true"
             android:ellipsize="end"
             android:background="@drawable/border_textview"
             android:layout_width="0dp"
-            android:layout_weight="1.5"
+            android:layout_weight="1.7"
             android:layout_height="45dp" />
     </LinearLayout>
 

@@ -3,17 +3,21 @@ package com.training.cst.quanlytienantrua.UserInterface.Fragment;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.content.ActivityNotFoundException;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Matrix;
+import android.media.ExifInterface;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.v4.app.Fragment;
 import android.text.format.DateFormat;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -54,8 +58,9 @@ public class FragmentPersonAdd extends Fragment {
     protected static final int CAMERA_REQUEST = 0;
     protected static final int GALLERY_PICTURE = 1;
     private Intent pictureActionIntent = null;
+    String nameImageInSdcard="";
     Bitmap bitmap;
-
+    // tao ra 1 khu vuc luu anh cua rieng minh , crop luon ra r moi luu.
     private String selectedImagePath;
 
     @Override
@@ -85,10 +90,13 @@ public class FragmentPersonAdd extends Fragment {
                                 pictureActionIntent = new Intent(
                                         Intent.ACTION_PICK,
                                         android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-                                startActivityForResult(
-                                        pictureActionIntent,
-                                        GALLERY_PICTURE);
-
+                                try {
+                                    pictureActionIntent.putExtra("return-data", true);
+                                    startActivityForResult(
+                                            pictureActionIntent,
+                                            GALLERY_PICTURE);
+                                }
+                                catch (ActivityNotFoundException e){}
                             }
                         });
 
@@ -122,22 +130,21 @@ public class FragmentPersonAdd extends Fragment {
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
 
         super.onActivityResult(requestCode, resultCode, data);
-
+        boolean requirePermissions = false;
         bitmap = null;
         selectedImagePath = null;
 
         if (resultCode == RESULT_OK && requestCode == CAMERA_REQUEST) {
             bitmap = (Bitmap) data.getExtras().get("data");
 
-            bitmap = Bitmap.createScaledBitmap(bitmap, 400, 400, true);
-
+            bitmap = Bitmap.createScaledBitmap(bitmap, 100, 100, true);
             bitmap = Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(),
                     bitmap.getHeight(), null, true);
             ivAvatarPerson.setImageBitmap(bitmap);
             saveImage(bitmap);
-
         } else if (resultCode == RESULT_OK && requestCode == GALLERY_PICTURE) {
             if (data != null) {
+                Log.d(TAG, "onActivityResult: " + "chay vai day k");
                 Uri selectedImage = data.getData();
                 String[] filePath1 = {MediaStore.Images.Media.DATA};
                 Cursor c = getActivity().getContentResolver().query(selectedImage, filePath1,
@@ -146,13 +153,29 @@ public class FragmentPersonAdd extends Fragment {
                 int columnIndex = c.getColumnIndex(filePath1[0]);
                 selectedImagePath = c.getString(columnIndex);
                 c.close();
+                try {
+                    ExifInterface exif = new ExifInterface(selectedImagePath);
+                    int orientation = exif.getAttributeInt(ExifInterface.TAG_ORIENTATION, 1);
+                    Log.d("EXIF", "Exif: " + orientation);
+                    Matrix matrix = new Matrix();
+                    if (orientation == 6) {
+                        matrix.postRotate(90);
+                    }
+                    else if (orientation == 3) {
+                        matrix.postRotate(180);
+                    }
+                    else if (orientation == 8) {
+                        matrix.postRotate(270);
+                    }
+                    bitmap = BitmapFactory.decodeFile(selectedImagePath); // load
+                    // preview image
+                    bitmap = Bitmap.createScaledBitmap(bitmap, 100, 100, false); // rotating bitmap
+                    saveImage(bitmap);
+                }
+                catch (Exception e) {
 
-                bitmap = BitmapFactory.decodeFile(selectedImagePath); // load
-                // preview image
-                bitmap = Bitmap.createScaledBitmap(bitmap, 400, 400, false);
-                filePath = selectedImagePath;
+                }
                 ivAvatarPerson.setImageBitmap(bitmap);
-
             } else {
                 Toast.makeText(getActivity(), "Cancelled",
                         Toast.LENGTH_SHORT).show();
@@ -160,20 +183,19 @@ public class FragmentPersonAdd extends Fragment {
         }
 
     }
-
     //Save image to sdcard
     public void saveImage(Bitmap bitmap) {
         boolean success = false;
-        String nameImageInSdcard = DateFormat.format("MM-dd-yy hh-mm-ss", new Date().getTime()).toString() + ".jpg";
+        nameImageInSdcard = DateFormat.format("MM-dd-yy hh-mm-ss", new Date().getTime()).toString() + ".jpg";
         // save to sdcard
         File sdCardDirectory = Environment.getExternalStorageDirectory();
         File image = new File(sdCardDirectory.toString(), nameImageInSdcard);
-
         // Encode the file as a PNG image.
         FileOutputStream outStream;
         try {
 
             outStream = new FileOutputStream(image);
+            bitmap.createScaledBitmap(bitmap, 100, 100, false);
             bitmap.compress(Bitmap.CompressFormat.PNG, 100, outStream);
         /* 100 to keep full quality of the image */
 

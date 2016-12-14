@@ -36,10 +36,11 @@
             android:layout_height="50dp">
             <TextView
                 android:id="@+id/fragment_food_item_rv_tv_name"
+                android:inputType="textNoSuggestions"
                 android:layout_width="0dp"
                 android:layout_height="50dp"
                 android:layout_weight="1.3"
-                android:textSize="18sp"
+                android:textSize="16dp"
                 android:ellipsize="middle"
                 android:singleLine="true"
                 android:layout_gravity="left"
@@ -52,7 +53,7 @@
                 android:layout_width="0dp"
                 android:layout_weight="0.7"
                 android:layout_height="50dp"
-                android:textSize="18sp"
+                android:textSize="16dp"
                 android:ellipsize="middle"
                 android:singleLine="true"
                 android:gravity="center"

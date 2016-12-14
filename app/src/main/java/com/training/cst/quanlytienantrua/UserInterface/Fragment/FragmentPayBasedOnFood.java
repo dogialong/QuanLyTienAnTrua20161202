@@ -14,7 +14,6 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.CheckBox;
-import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Spinner;
 import android.widget.Toast;
@@ -26,6 +25,7 @@ import com.training.cst.quanlytienantrua.DataManager.Object.Food;
 import com.training.cst.quanlytienantrua.DataManager.Object.History;
 import com.training.cst.quanlytienantrua.DataManager.Object.Person;
 import com.training.cst.quanlytienantrua.Database.DatabaseUser;
+import com.training.cst.quanlytienantrua.Helper.Contants;
 import com.training.cst.quanlytienantrua.R;
 
 import java.text.SimpleDateFormat;
@@ -46,6 +46,7 @@ public class FragmentPayBasedOnFood extends Fragment {
     private List<Person> mListPerson;
     private List<Integer>   mListPosition ;      // luu vi tri chk trong spinner
     private List<Integer> mListPositionCkb ;    // luu vi tri chk person
+    private List<Boolean> mListChecked ;    // luu vi tri chk person
     private SpinnerAdapter mSpinnerAdapter;
     private FragmentPayFoodAdapter mFragmentPayFoodAdapter;
     String mString;
@@ -53,12 +54,14 @@ public class FragmentPayBasedOnFood extends Fragment {
     String [] arrString;
     Spinner spinner;
     private RadioGroup radioCkbGroup;
+    private CheckBox chkAll;
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
         View myView = (View) inflater.inflate(R.layout.fragment_pay_baseonfood, null, false);
         RecyclerView mRecyclerView = (RecyclerView) myView.findViewById(R.id.fragment_food_rv);
+        chkAll = (CheckBox) myView.findViewById(R.id.chkPayFood);
         initSpinner();
         mListPosition = new ArrayList<>();
         mListPositionCkb = new ArrayList<>();
@@ -66,6 +69,7 @@ public class FragmentPayBasedOnFood extends Fragment {
         mListPerson = mDatabaseUser.getPerson();
 //        initPosition();
         initStringList();
+        initBoolean(false);
         spinner = (Spinner) myView.findViewById(R.id.myspinner);
         spinner.setAdapter(mSpinnerAdapter);
         spinner.setDropDownVerticalOffset(50);
@@ -76,6 +80,7 @@ public class FragmentPayBasedOnFood extends Fragment {
         }
         radioCkbGroup = (RadioGroup) myView.findViewById(R.id.radioCheck);
         mFragmentPayFoodAdapter = new FragmentPayFoodAdapter(getContext(), mListPerson, mListString,
+                mListChecked,
                 new ItemClickListener() {
 
                     @Override
@@ -86,12 +91,15 @@ public class FragmentPayBasedOnFood extends Fragment {
                                 if (!mListPositionCkb.contains(possition)) {
                                     mListPositionCkb.add(possition);
                                     Collections.sort(mListPositionCkb);
+                                    mListChecked.set(possition,true);
+                                    Log.d("hihi", "clickItemListtener: " + mListChecked);
                                     if(mListPositionCkb.size()>0){
                                         spinner.setVisibility(View.VISIBLE);
                                     }
                                     mListPosition.clear();
                                 }
                             } else {
+                                mListChecked.set(possition,false);
                                 mListPositionCkb.remove(mListPositionCkb.indexOf(possition));
                                 if(mListPositionCkb.size()==0) {
                                     spinner.setVisibility(View.INVISIBLE);
@@ -103,7 +111,29 @@ public class FragmentPayBasedOnFood extends Fragment {
                         }
                     }
                 });
+        mFragmentPayFoodAdapter.loadCheckbox(initBoolean(false));
         Button btnPay = (Button) myView.findViewById(R.id.fragment_pay_food_btnpay);
+        chkAll.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(chkAll.isChecked()) {
+                    initmListPostionCkb();
+                    initBoolean(true);
+                    if(mListPositionCkb.size()>0){
+                        spinner.setVisibility(View.VISIBLE);
+                    }
+                    Log.d("ahi", "onClick: " + mListPositionCkb);
+                    mFragmentPayFoodAdapter.loadCheckbox(mListChecked);
+
+                } else {
+                    mListChecked.clear();
+                    mListPositionCkb.clear();
+                    initBoolean(false);
+                    spinner.setVisibility(View.INVISIBLE);
+                    mFragmentPayFoodAdapter.loadCheckbox(mListChecked);
+                }
+            }
+        });
         btnPay.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -128,6 +158,7 @@ public class FragmentPayBasedOnFood extends Fragment {
                             if (!mListPosition.contains(possition)) {
                                 mListPosition.add(possition);
                                 Collections.sort(mListPosition);
+                                Log.d("hih", "clickItemListtener: " + mListChecked);
                             }
                         } else {
                             mListPosition.remove(mListPosition.indexOf(possition));
@@ -135,7 +166,7 @@ public class FragmentPayBasedOnFood extends Fragment {
                         StringBuilder stringBuilder = new StringBuilder();
                         if (mListPosition.size() > 0) {
                             for (int i = 0; i < mListPosition.size(); i++) {
-                                stringBuilder.append(mListFood.get(mListPosition.get(i)).getNameFood());
+                                stringBuilder.append(Contants.handlerTextToLong2(mListFood.get(mListPosition.get(i)).getNameFood()));
                                 if(i < mListPosition.size()-1) {
                                     stringBuilder.append(",");
                                 }
@@ -149,13 +180,23 @@ public class FragmentPayBasedOnFood extends Fragment {
 
                     }
                     for (int i = 0; i < mListPositionCkb.size(); i++) {
-                        mListString.set(mListPositionCkb.get(i),mString);
+                        mListString.set(mListPositionCkb.get(i), mString);
                     }
-                    moneyPay = 0;                                   // reset lai so tien
-                    mFragmentPayFoodAdapter.notifyDataSetChanged();
+                    moneyPay = 0;               // reset lai so tien
+                Log.d("ahhi", "clickItemListtener: " + mListChecked);
+//                mFragmentPayFoodAdapter.loadCheckbox(mListChecked);
+                mFragmentPayFoodAdapter.loadCheckbox(mListChecked);
 
             }
         });
+    }
+    // init list boolean
+    private List<Boolean> initBoolean (Boolean checked) {
+        mListChecked = new ArrayList<>();
+        for(int i = 0 ; i < mListPerson.size();i++){
+            mListChecked.add(checked);
+        }
+        return mListChecked;
     }
     // init list checkbox
     private void initmListPostionCkb() {
@@ -163,25 +204,6 @@ public class FragmentPayBasedOnFood extends Fragment {
         for (int i = 0; i < mListPerson.size(); i++) {
             mListPositionCkb.add(i);
         }
-    }
-    // xu li su kien checkbox check hay khong
-    public void addListenerOnButton() {
-        RadioButton rdbCheckAll = (RadioButton) radioCkbGroup.findViewById(R.id.radioCheckAll);
-        rdbCheckAll.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mFragmentPayFoodAdapter.loadCheckbox(true);
-                initmListPostionCkb();
-            }
-        });
-        RadioButton rdbUnCheckall = (RadioButton) radioCkbGroup.findViewById(R.id.radioUnCheckAll);
-        rdbUnCheckall.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mFragmentPayFoodAdapter.loadCheckbox(false);
-                mListPositionCkb.clear();
-            }
-        });
     }
     // show dialog
     private void showDialog() {

@@ -32,6 +32,7 @@
     <string name="recharge_falied">Recharge failed</string>
     <string name="delete_person_success">Delete person success</string>
     <string name="custom_spinner">Custom spinner</string>
+    <string name="required_permission">Please enable ALL permissions from app settings.</string>
     <!-- navigation drawer item labels  -->
     <string-array name="nav_drawer_labels">
         <item>@string/nav_item_overview</item>

@@ -8,29 +8,31 @@ public class Account {
     private String mUserName;
     private String mPassword;
     private String mRePassword;
+    private String mAvatar;
     public Account(String mUserName, String mPassword,String mRePassword) {
         this.mUserName = mUserName;
         this.mPassword = mPassword;
         this.mRePassword = mRePassword;
+//        this.mAvatar = mAvatar;
     }
 
     public String getUserName() {
         return mUserName;
     }
 
-    public void setUserName(String mUserName) {
-        this.mUserName = mUserName;
-    }
-
     public String getPassword() {
         return mPassword;
     }
 
-    public void setPassword(String mPassword) {
-        this.mPassword = mPassword;
-    }
-
     public String getRePassword() {
         return mRePassword;
+    }
+
+    public String getmAvatar() {
+        return mAvatar;
+    }
+
+    public void setmAvatar(String mAvatar) {
+        this.mAvatar = mAvatar;
     }
 }

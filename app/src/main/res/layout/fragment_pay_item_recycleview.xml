@@ -19,6 +19,7 @@
         <TextView
             android:id="@+id/fragment_pay_item_recycleview_tv_nameperson"
             android:layout_width="160dp"
+            android:inputType="textNoSuggestions"
             android:layout_height="wrap_content"
             android:textSize="@dimen/text_size_normal"
             android:ellipsize="middle"
@@ -36,6 +37,7 @@
         android:clickable="false"
         android:cursorVisible="false"
         android:focusable="false"
+        android:scrollHorizontally="true"
         android:focusableInTouchMode="false"
         android:textColor="@color/colorPrimary"
         android:padding="@dimen/padding_text"

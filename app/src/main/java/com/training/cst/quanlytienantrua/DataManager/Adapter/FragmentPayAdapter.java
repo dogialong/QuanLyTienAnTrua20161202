@@ -4,7 +4,6 @@ import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -28,6 +27,7 @@ public class FragmentPayAdapter extends RecyclerView.Adapter<FragmentPayAdapter.
     ItemClickListener itemClickListener;
     boolean checked = true;
     private List<String> mListString;
+    private List<Boolean> mListBoolean;
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).
@@ -36,10 +36,11 @@ public class FragmentPayAdapter extends RecyclerView.Adapter<FragmentPayAdapter.
     }
 
     public FragmentPayAdapter(Context mContext, List<Person> mListPerson,
-                              List<String> mListString,ItemClickListener itemClickListener) {
+                              List<String> mListString,List<Boolean> mListBoolean,ItemClickListener itemClickListener) {
         this.mListPerson = mListPerson;
         this.mContext = mContext;
         this.mListString = mListString;
+        this.mListBoolean = mListBoolean;
         this.itemClickListener = itemClickListener;
     }
     public void loadNewList(List<Person> mListPerson){
@@ -47,19 +48,22 @@ public class FragmentPayAdapter extends RecyclerView.Adapter<FragmentPayAdapter.
         this.mListPerson.addAll(mListPerson);
         notifyDataSetChanged();
     }
-    public void loadNewListString(List<String> mListString){
+    public void loadNewListString(List<String> mListString,List<Boolean> mListBoolean1){
+        this.mListBoolean.clear();
+        this.mListBoolean.addAll(mListBoolean1);
         this.mListString.clear();
         this.mListString.addAll(mListString);
-        Log.d("ahi", "loadNewListString: " + this.mListString.size() + mListString.size());
         notifyDataSetChanged();
     }
-    public void checkboxSelected(Boolean checked) {
-        this.checked = checked;
+    public void loadNewBoolean(List<Boolean> mListBoolean1){
+        this.mListBoolean.clear();
+        this.mListBoolean.addAll(mListBoolean1);
         notifyDataSetChanged();
     }
     @Override
     public void onBindViewHolder(ViewHolder holder, final int position) {
-        holder.tvNamePersonPay.setText(mListPerson.get(position).getNamePerson());
+        holder.tvNamePersonPay.setText(Contants.handlerTextToLong(mListPerson.get(position).getNamePerson()));
+
         holder.tvMoneyPersonPay.setText((mListString.get(position)));
         holder.chkPay.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -67,7 +71,7 @@ public class FragmentPayAdapter extends RecyclerView.Adapter<FragmentPayAdapter.
                 itemClickListener.clickItemListtener(v,position);
             }
         });
-        holder.chkPay.setChecked(checked);
+        holder.chkPay.setChecked(this.mListBoolean.get(position));
     }
 
 
